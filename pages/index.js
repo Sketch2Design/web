@@ -1,9 +1,10 @@
+import Dashboard from "@/model/Dashboard/Dashboard";
 
 
 export default function Home() {
   return (
-    <div>
-    	s
+    <div >
+    	<Dashboard/>
     </div>
   )
 }
