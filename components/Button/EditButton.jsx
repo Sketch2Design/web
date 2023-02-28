@@ -1,5 +1,5 @@
-export default function Editbutton({icon}){
-    return(
+export default function EditButton({ icon }) {
+    return (
         <>
             <button>{icon}</button>
         </>

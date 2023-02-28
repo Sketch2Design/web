@@ -1,7 +1,10 @@
-import Button from "../components/Button";
-import Editbutton from "../components/Editbutton";
-import Input from "../components/Input";
+import Link from "next/link";
+
 import {MdModeEditOutline} from "react-icons/md"
+
+import Button from "@/components/Button/Button";
+import Editbutton from "@/components/Button/EditButton";
+import Input from "@/components/Input/Input";
 
 export default function Profile(){
     return(
@@ -21,22 +24,18 @@ export default function Profile(){
                     <Button buttonText="Edit Profile Photo"/>
                 </div>
                 <div className="space-y-3 "> 
-                    <h5 className="text-fuchsia-600">Profile</h5>
-                    <h5>Security</h5>
+                    <Link href='security'><h5>Profile</h5></Link>
+                    <h5 className="text-fuchsia-600">Security</h5>
                 </div>
             </div>
 
             <div className="flex justify-between items-center pb-24 px-24">
                 <div>
                     <div className="flex justify-between">
-                        <h3><b>Name</b></h3>
+                        <h3><b>password</b></h3>
                         <Editbutton icon={<MdModeEditOutline/>} />
                     </div>
-                    <Input type='text' placeholder='Name'/>
-                </div>
-                <div>
-                    <h3><b>Email</b></h3>
-                    <Input type='email' placeholder='Email'/>
+                    <Input type='password' placeholder='Password'/>
                 </div>
             </div>
         </div>

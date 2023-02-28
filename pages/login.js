@@ -1,7 +1,7 @@
-import Buttonicon from "../components/Buttonicon";
-import Header from "../components/Header";
-import Iconbutton from "../components/Iconbutton";
-import Input from "../components/Input";
+import ButtonIcon from "@/components/Button/ButtonIcon";
+import Header from "@/model/Auth/Header";
+import IconButton from "@/components/Button/IconButton";
+import Input from "@/components/Input/Input";
 import {AiOutlineArrowRight} from "react-icons/ai"
 import {CgProfile} from "react-icons/cg"
 import {AiOutlineGoogle} from "react-icons/ai"
@@ -22,16 +22,16 @@ export default function Login(){
                     <div className="flex flex-col space-y-12">
                         <Input type="email" placeholder="Email" />
                         <Input type="password" placeholder="Password" />
-                        <Buttonicon  value="Login to your Account" 
+                        <ButtonIcon width='w-80' height='h-16' value="Login to your Account" 
                         icon={<AiOutlineArrowRight className="w-6 h-6"/>} />
                     </div>
                     <div className="flex justify-items-center font-bold">
                         <h3>or</h3>
                     </div>
                     <div className="flex flex-col space-y-12">
-                        <Iconbutton className="w-6 h-6 " icon={CgProfile} value="Sign in as Guest"/>
-                        <Iconbutton className="w-6 h-6" icon={AiOutlineGoogle} value="Sign in with Google"/>
-                        <Buttonicon  value="Create an Account" 
+                        <IconButton width='w-80' height='h-16'  icon={<CgProfile/>} value="Sign in as Guest"/>
+                        <IconButton width='w-80' height='h-16'  icon={<AiOutlineGoogle/>} value="Sign in with Google"/>
+                        <ButtonIcon width='w-80' height='h-16'  value="Create an Account" 
                         icon={<AiOutlineArrowRight className="w-6 h-6"/>}/>
                     </div>
                 </div>   
