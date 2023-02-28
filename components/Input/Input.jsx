@@ -1,8 +1,14 @@
-export default function Input({type, placeholder}){
-    return(
+export default function Input({ name, type, placeholder }) {
+    return (
         <>
-            <input type={type} placeholder={placeholder} 
-            className="bg-zinc-800 text-zinc-500 rounded-md h-16 w-80 px-4" />
+            <input
+                className={`text-zinc-500 px-4 bg-zinc-800 w-80 h-16 rounded-md outline-none
+            focus:border focus:border-violet-600 
+            placeholder:text-zinc-500`}
+                type={type}
+                placeholder={placeholder}
+                name={name}
+            />
         </>
     )
 }

@@ -1,47 +1,30 @@
-import Link from "next/link";
+import { MdModeEditOutline } from 'react-icons/md'
 
-import {MdModeEditOutline} from "react-icons/md"
+import Main from '@/model/Auth/Profile/Main'
+import LabelInput from '@/components/Input/LabelInput'
+import Navbar from '@/model/Auth/Profile/Navbar'
 
-import Button from "@/components/Button/Button";
-import EditButton from "@/components/Button/EditButton";
-import Input from "@/components/Input/Input";
+export default function Profile() {
+    return (
+        <div className="flex flex-col justify-between items-center min-h-screen bg-zinc-900 py-32">
+            <Main />
 
-export default function Profile(){
-    return(
-        <div className="flex flex-col justify-between min-h-screen bg-zinc-900 ">
-
-            <div className="flex justify-around items-center pt-24">
-                <div>
-                    <h1> <b>HELLO</b> </h1>
-                </div>
-                <div className="space-y-16 flex flex-col items-center justify-center">
-                    <div className="w-80 h-80 rounded-full border-8 border-zinc-800 flex justify-center items-center">
-                        <div className="relative w-44 h-44 rounded-full bg-gradient-to-r from-fuchsia-600 to-violet-600">
-                            <img src="wall.jpg" className="w-40 h-40 bg-zinc-700 rounded-full flex items-center 
-                            justify-center text-center absolute inset-0 m-auto"/>
-                        </div>
-                    </div>
-                    <Button width='w-80' height='h-16' buttonText="Edit Profile Photo"/>
-                </div>
-                <div className="space-y-3 "> 
-                    <h5 className="text-fuchsia-600">Profile</h5>
-                    <Link href='security'><h5>Security</h5></Link>
-                </div>
+            <div className="flex justify-center space-x-96 items-center px-96">
+                <LabelInput
+                    icon={<MdModeEditOutline className='w-5 h-5'/>}
+                    name="name"
+                    placeholder="Name"
+                    type="text"
+                />
+                <LabelInput
+                    name="email"
+                    placeholder="Email"
+                    type="email"
+                />
             </div>
 
-            <div className="flex justify-between items-center pb-24 px-24">
-                <div>
-                    <div className="flex justify-between">
-                        <h3><b>Name</b></h3>
-                        <EditButton width='w-80' height='h-16' icon={<MdModeEditOutline/>} />
-                    </div>
-                    <Input type='text' placeholder='Name'/>
-                </div>
-                <div>
-                    <h3><b>Email</b></h3>
-                    <Input type='email' placeholder='Email'/>
-                </div>
-            </div>
+            <Navbar/>
+
         </div>
     )
 }

@@ -2,7 +2,7 @@ import { AiOutlineArrowRight, AiOutlineGoogle } from 'react-icons/ai'
 
 import ButtonIcon from '@/components/Button/ButtonIcon'
 import IconButton from '@/components/Button/IconButton'
-import InputX from '@/components/Input/InputX'
+import Input from '@/components/Input/Input'
 
 export default function Home() {
     return (
@@ -20,7 +20,7 @@ export default function Home() {
                 width="w-80"
             />
 
-            <InputX type="email" placeholder="Email" name="email" />
+            <Input type="email" placeholder="Email" name="email" />
         </div>
     )
 }
