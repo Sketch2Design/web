@@ -1,3 +1,68 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer base {
+    td, th {
+        @apply border px-4;
+    }
+
+    h1 {
+       @apply text-5xl font-bold
+    }
+
+    h2 {
+        @apply text-4xl font-bold
+    }
+
+    h3 {
+        @apply text-3xl font-bold
+    }
+
+    h4 {
+        @apply text-xl font-bold
+    }
+
+    h5 {
+    @apply text-lg font-bold
+    }
+
+    h6 {
+        @apply text-base 
+    }
+
+    p {
+        @apply text-sm 
+    }
+}
+
+@layer components{
+    .edit_topbar_icon {
+        @apply w-7 h-7
+    }
+
+    .edit_topbar_icon_mini {
+        @apply w-[26px] h-[26px]
+    }
+
+    .edit_input_default {
+        @apply  focus:bg-violet-600 bg-zinc-900 text-white h-10 px-2 rounded-md outline-none w-8/12 
+    }
+
+    .edit_sidebar_icon_wrapper {
+        @apply bg-zinc-900 h-10 px-2 flex justify-center items-center rounded-md cursor-pointer border-2 border-zinc-900 hover:border-violet-600
+    }
+}
+
+/* Works for Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Works for Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
