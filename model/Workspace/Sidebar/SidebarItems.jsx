@@ -1,16 +1,22 @@
-import React from 'react'
+import Link from 'next/link'
 
-export default function SidebarItems({ value, icon }) {
+export default function SidebarItems({ value, icon, path, active }) {
     return (
-        <div className="flex items-center space-x-2 w-56 px-2 py-3 border-2 rounded-lg">
-            {icon}
-            <button
-                className="
-		
-	"
+        <Link href={path}>
+            <div
+                className={`${
+                    active == path
+                        ? 'bg-gradient-to-b from-fuchsia-700 to-violet-700'
+                        : 'bg-transparent'
+                } rounded-md relative w-64 h-14 flex items-center justify-center p-[2px]`}
             >
-                {value}
-            </button>
-        </div>
+                <button
+                    className={`bg-zinc-800 w-full h-full px-4 py-2 rounded-md font-semibold text-xl flex items-center space-x-3`}
+                >
+                    <span>{icon}</span>
+                    <span>{value}</span>
+                </button>
+            </div>
+        </Link>
     )
 }

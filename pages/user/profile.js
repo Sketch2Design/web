@@ -11,20 +11,15 @@ export default function Profile() {
 
             <div className="flex justify-center space-x-96 items-center px-96">
                 <LabelInput
-                    icon={<MdModeEditOutline className='w-5 h-5'/>}
+                    icon={<MdModeEditOutline className="w-5 h-5" />}
                     name="name"
                     placeholder="Name"
                     type="text"
                 />
-                <LabelInput
-                    name="email"
-                    placeholder="Email"
-                    type="email"
-                />
+                <LabelInput name="email" placeholder="Email" type="email" />
             </div>
 
-            <Navbar/>
-
+            <Navbar />
         </div>
     )
 }

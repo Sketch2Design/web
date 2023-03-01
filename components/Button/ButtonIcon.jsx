@@ -9,8 +9,8 @@ export default function ButtonIcon({ value, icon, width, height }) {
 		  flex items-center justify-between
 		`}
         >
-            {value}
-            {icon}
+            <span>{value}</span>
+            <span>{icon}</span>
         </button>
     )
 }

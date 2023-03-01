@@ -14,9 +14,9 @@ import Button from '@/components/Button/Button'
 import SidebarItems from './SidebarItems'
 import ButtonIcon from '@/components/Button/ButtonIcon'
 
-const paths = ['dashboard', 'designs', 'templates', 'settings']
+const paths = ['dashboard', 'settings']
 
-export default function Sidebar() {
+export default function AdminSidebar() {
     const [current, setcurrent] = useState('dashbaord')
 
     const router = useRouter()
@@ -34,7 +34,7 @@ export default function Sidebar() {
             <div className="flex flex-col justify-center space-y-2 ">
                 <div className="rounded-full bg-slate-100 w-24 h-24 border-4 border-t-fuchsia-600 border-r-fuchsia-600 border-b-violet-900 border-l-violet-900"></div>
                 <h5 className=" flex justify-center font-bold">Name</h5>
-                <Link href="user/profile">
+                <Link href="profile">
                     <Button value="Profile" />
                 </Link>
             </div>
@@ -47,18 +47,7 @@ export default function Sidebar() {
                         path="dashboard"
                         active={current}
                     />
-                    <SidebarItems
-                        icon={<AiFillFolder />}
-                        value="My designs"
-                        path="designs"
-                        active={current}
-                    />
-                    <SidebarItems
-                        icon={<AiFillLayout />}
-                        value="Templates"
-                        path="templates"
-                        active={current}
-                    />
+
                     <SidebarItems
                         icon={<AiFillSetting />}
                         value="Settings"

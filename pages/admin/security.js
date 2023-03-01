@@ -23,7 +23,7 @@ export default function Profile() {
                 />
             </div>
 
-            <Navbar />
+            <Navbar admin={true} />
         </div>
     )
 }
