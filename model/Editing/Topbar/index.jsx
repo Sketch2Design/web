@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useElementContext } from '@/store/context/providers/ElementProvider'
 
 import { TOPBAR_ITMES } from '@/utils/constants/editorInterface.constant'
 
@@ -10,7 +10,7 @@ import Single from './Items/Single'
 import Multiple from './Items/Multiple'
 
 export default function Topbar() {
-    const [current, setcurrent] = useState(null)
+    const { element, elementDispatch } = useElementContext()
 
     return (
         <div className="bg-zinc-800 h-20  rounded-xl flex justify-between items-center px-6">
@@ -19,23 +19,24 @@ export default function Topbar() {
                     id={0}
                     icon={<BiRectangle className="edit_topbar_icon" />}
                     values={TOPBAR_ITMES.SHAPES}
-                    current={current}
-                    name="Rectangle"
-                    setcurrent={setcurrent}
+                    current={element}
+                    name="Shapes"
+                    defaultSelected="Rectangle"
+                    setcurrent={elementDispatch}
                 />
                 <Single
                     id={1}
                     icon={<IoText className="edit_topbar_icon" />}
-                    current={current}
+                    current={element}
                     name="Text"
-                    setcurrent={setcurrent}
+                    setcurrent={elementDispatch}
                 />
                 <Single
                     id={2}
                     icon={<BiImageAdd className="edit_topbar_icon" />}
-                    current={current}
+                    current={element}
                     name="Image"
-                    setcurrent={setcurrent}
+                    setcurrent={elementDispatch}
                 />
             </div>
 

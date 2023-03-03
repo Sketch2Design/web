@@ -18,19 +18,30 @@ import {
     MdOutlineAlignVerticalCenter,
 } from 'react-icons/md'
 
+
+// ------------------------------------------- Elements ------------------------------------------------
+export const SHAPES = {
+    RECTANGLE: 'Rectangle',
+    CIRCLE: 'Circle',
+    POLYGON: 'Polygon'
+}
+
 // ------------------------------------------- Topbar -----------------------------------------------------
 export const TOPBAR_ITMES = {
     SHAPES: [
         {
-            name: 'Rectangle',
+            id: 0,
+            name: SHAPES.RECTANGLE,
             icon: <BiRectangle className="edit_topbar_icon_mini" />,
         },
         {
-            name: 'Circle',
+            id: 0,
+            name: SHAPES.CIRCLE,
             icon: <FaRegCircle className="edit_topbar_icon_mini" />,
         },
         {
-            name: 'Polygon',
+            id: 0,
+            name: SHAPES.POLYGON,
             icon: <FiTriangle className="edit_topbar_icon_mini" />,
         },
     ],

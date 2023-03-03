@@ -19,7 +19,7 @@ export default function Profile() {
                 <LabelInput name="email" placeholder="Email" type="email" />
             </div>
 
-            <Navbar admin={true}/>
+            <Navbar admin={true} />
         </div>
     )
 }

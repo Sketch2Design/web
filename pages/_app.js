@@ -1,9 +1,12 @@
+import Context from '@/store/context/Context'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
     return (
         <div className="bg-zinc-900 text-white">
-            <Component {...pageProps} />
+            <Context>
+                <Component {...pageProps} />
+            </Context>
         </div>
     )
 }

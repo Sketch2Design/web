@@ -1,3 +1,4 @@
+import { ACTIONS } from '@/store/reducer/elementReducer'
 import { useState } from 'react'
 
 import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md'
@@ -7,16 +8,24 @@ export default function Multiple({
     icon,
     current,
     name,
+    defaultSelected,
     values,
     setcurrent,
 }) {
-    const [selected, setselected] = useState(name)
+    const [selected, setselected] = useState(defaultSelected)
     const [open, setopen] = useState(false)
 
-    function changeCurrentMultiple(name) {
-        setcurrent({ id: id, name: name })
+    function changeCurrent(value) {
+        current.id == null
+            ? setcurrent({
+                  type: ACTIONS.UPDATE_ALL,
+                  id: id,
+                  main: name,
+                  value: value,
+              })
+            : setcurrent({ type: ACTIONS.UPDATE_VALUE, value: value })
         setopen((prev) => !prev)
-        setselected(name)
+        setselected(value)
     }
 
     return (
@@ -26,7 +35,16 @@ export default function Multiple({
             } flex flex-col relative cursor-pointer`}
         >
             <div className="flex justify-center items-center w-14">
-                <span onClick={() => setcurrent({ id: id, name: selected })}>
+                <span
+                    onClick={() =>
+                        setcurrent({
+                            type: ACTIONS.UPDATE_ALL,
+                            id: id,
+                            main: name,
+                            value: selected,
+                        })
+                    }
+                >
                     {current == null
                         ? icon
                         : values.filter((item) => item.name == selected)[0]
@@ -49,7 +67,7 @@ export default function Multiple({
                         ?.map((item) => (
                             <span
                                 key={item.name}
-                                onClick={() => changeCurrentMultiple(item.name)}
+                                onClick={() => changeCurrent(item.name)}
                             >
                                 {item.icon}
                             </span>
