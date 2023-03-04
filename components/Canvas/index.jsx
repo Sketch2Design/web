@@ -1,6 +1,8 @@
 import { useRef } from 'react'
+import { Layer, Stage } from 'react-konva'
 
 import useDraw from '@/utils/hooks/Editing/useDraw'
+import DrawShapes from './Shapes/DrawShapes'
 
 export default function Canvas() {
     const canvasRef = useRef(null)
@@ -9,12 +11,16 @@ export default function Canvas() {
 
     return (
         <div className="w-full h-full flex justify-center items-center">
-            <canvas
+            <Stage
+                ref={canvasRef}
                 className="bg-white"
                 width={600}
                 height={800}
-                ref={canvasRef}
-            ></canvas>
+            >
+                <Layer width={600} height={800}>
+                    <DrawShapes />
+                </Layer>
+            </Stage>
         </div>
     )
 }

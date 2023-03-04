@@ -1,4 +1,4 @@
-import { ACTIONS } from '@/store/reducer/elementReducer'
+import { ELEMENT_ACTIONS } from '@/store/reducer/elementReducer'
 import { useState } from 'react'
 
 import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md'
@@ -18,12 +18,12 @@ export default function Multiple({
     function changeCurrent(value) {
         current.id == null
             ? setcurrent({
-                  type: ACTIONS.UPDATE_ALL,
+                  type: ELEMENT_ACTIONS.UPDATE_ALL,
                   id: id,
                   main: name,
                   value: value,
               })
-            : setcurrent({ type: ACTIONS.UPDATE_VALUE, value: value })
+            : setcurrent({ type: ELEMENT_ACTIONS.UPDATE_VALUE, value: value })
         setopen((prev) => !prev)
         setselected(value)
     }
@@ -38,7 +38,7 @@ export default function Multiple({
                 <span
                     onClick={() =>
                         setcurrent({
-                            type: ACTIONS.UPDATE_ALL,
+                            type: ELEMENT_ACTIONS.UPDATE_ALL,
                             id: id,
                             main: name,
                             value: selected,

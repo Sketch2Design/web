@@ -1,13 +1,13 @@
-import { ACTIONS } from '@/store/reducer/elementReducer'
+import { ELEMENT_ACTIONS } from '@/store/reducer/elementReducer'
 
 export default function Single({ id, icon, current, name, setcurrent }) {
     function changeCurrent() {
         current.id == id
             ? setcurrent({
-                  type: ACTIONS.RESET,
+                  type: ELEMENT_ACTIONS.RESET,
               })
             : setcurrent({
-                  type: ACTIONS.UPDATE_ALL,
+                  type: ELEMENT_ACTIONS.UPDATE_ALL,
                   id: id,
                   main: name,
                   value: name,

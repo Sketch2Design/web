@@ -2,30 +2,40 @@ import { useEffect } from "react";
 
 import { useCanvasContext } from "@/store/context/providers/CanvasProvider";
 import { useElementContext } from "@/store/context/providers/ElementProvider";
-import { ACTIONS } from "@/store/reducer/elementReducer";
+import { ELEMENT_ACTIONS } from "@/store/reducer/elementReducer";
 
 import useMouseMove from "./useMouseMove";
-import drawShape from "@/utils/helpers/editor/draw/shapes";
+import { CANVAS_ACTIONS } from "@/store/reducer/canvasReducer";
 
 
 export default function useDraw(ref){
 
     const [start, end] = useMouseMove(ref)
 
-    const { canvasItems, canvasItemsDispatch } = useCanvasContext()
+    const { canvasItemsDispatch ,setcurrentElement} = useCanvasContext()
     const { element, elementDispatch } = useElementContext()
 
     useEffect(() => {
         if(element?.id !== null && (start !== null && end !== null) && start.x !== end.x){
-            drawShape(ref, element, canvasItemsDispatch, start, end)
+            canvasItemsDispatch({
+                current: setcurrentElement,
+                type: CANVAS_ACTIONS.ADD, 
+                values: {
+                    main: element.main,
+                    value: element.value,
+                    radius: element.value == 'Circle' && Math.abs((end.x - start.y) * 2),
+                    sx: start.x,
+                    sy: start.y,
+                    ex: end.x,
+                    ey: end.y,
+                    w: Math.abs(end.x - start.x),
+                    h: Math.abs(end.y - start.y)
+                }})
         }else if(start?.x == end?.x){
-            elementDispatch({type: ACTIONS.RESET})
-            canvasItemsDispatch()
+            elementDispatch({type: ELEMENT_ACTIONS.RESET})
+            ref.current.mouseClickEndShape == null && setcurrentElement(null)
         }
     }, [end])
 
-    console.log(canvasItems);
-    console.log(start, end);
-    
 
 }

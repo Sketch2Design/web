@@ -3,14 +3,12 @@
  * @property {string} ADD
  * @property {string} DELETE
  * @property {string} UPDATE
- * @property {string} CURRENT
  */
 
 export const CANVAS_ACTIONS = {
     ADD: 'add_item',
     DELETE: 'delete_item',
     UPDATE: 'update_item',
-    CURRENT: 'set_current'
 }
 
 
@@ -31,6 +29,7 @@ export const CANVAS_ACTIONS = {
  * @typedef {object} action
  * @property {CANVAS_ACTIONS} type
  * @property {item} values
+ * @property {callback} current
  */
 
 /**
@@ -42,30 +41,27 @@ export const CANVAS_ACTIONS = {
 export function canvasReducer(state, action){
     switch (action.type) {
         case CANVAS_ACTIONS.ADD: {
+            const id = state[state.length - 1]?.id ? state[state.length - 1]?.id + 1 : 1
+            action.current(id)
             return [
                 ...state,
-                { id: state?.id ? state?.id + 1 : 1, ...action.values}
+                { id: id, ...action.values}
             ]
         }
         
         case CANVAS_ACTIONS.UPDATE: {
             return state.map((item) => 
-                item.id == action.values.id && 
-                {...item, ...action.values}
+                item.id === action.values.id ?
+                {...item, ...action.values} : item
             )
         }
 
         case CANVAS_ACTIONS.DELETE: {
-            return state.map((item) => 
-                item.id == action.values.id && null
-            )
+
+            const filtered = state.filter((item)=> item.id !== action.values.id)
+            return filtered
         }
 
-        case CANVAS_ACTIONS.CURRENT: {
-            
-            return state.map((item) => 
-                item.id == action.values.id && null
-            )
-        }
+        
     }
 }
