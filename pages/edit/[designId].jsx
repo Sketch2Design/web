@@ -1,7 +1,7 @@
-import Topbar from '@/model/Editing/Topbar'
-import Sidebar from '@/model/Editing/Sidebar'
-
 import dynamic from 'next/dynamic'
+
+import Topbar from '@/model/Editing/Topbar'
+import RightSidebar from '@/model/Editing/RightSidebar'
 
 const Canvas = dynamic(() => import('@/components/Canvas'), {
     ssr: false,
@@ -13,7 +13,7 @@ export default function EditingInterface() {
             <Topbar />
             <div className="flex justify-between space-x-4 w-full h-full">
                 <Canvas />
-                {/* <Sidebar /> */}
+                <RightSidebar />
             </div>
         </div>
     )

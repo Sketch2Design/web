@@ -1,5 +1,5 @@
-import { useRef } from 'react'
-import { Rect } from 'react-konva'
+import { useRef, useState } from 'react'
+import { Group, Rect } from 'react-konva'
 
 import { ELEMENT_ACTIONS } from '@/store/reducer/elementReducer'
 import { useElementContext } from '@/store/context/providers/ElementProvider'
@@ -7,29 +7,53 @@ import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
 
 import Transform from '../Transform'
 
-export default function Rectangle({ shapeProps, id, onSelect, onChange }) {
+export default function Rectangle({ shapeProps, id, onChange }) {
     const shape = useRef(null)
+
+    const [hover, sethover] = useState({ isHover: false, stroke: 0 })
 
     const { elementDispatch } = useElementContext()
     const { currentElement, setcurrentElement } = useCanvasContext()
 
     return (
-        <>
+        <Group>
+            {hover.isHover && currentElement.id !== id ? (
+                <Rect
+                    width={shapeProps.w + hover.stroke}
+                    height={shapeProps.h + hover.stroke}
+                    x={shapeProps.sx - hover.stroke / 2}
+                    y={shapeProps.sy - hover.stroke / 2}
+                    fill="transparent"
+                    stroke="#810096"
+                    strokeWidth={hover.stroke + 5}
+                />
+            ) : (
+                <></>
+            )}
             <Rect
                 key={shapeProps.id}
                 width={shapeProps.w}
                 height={shapeProps.h}
                 x={shapeProps.sx}
                 y={shapeProps.sy}
-                fill="green"
+                fill={shapeProps.fill || 'black'}
+                stroke={shapeProps.borderColor || 'red'}
+                strokeWidth={shapeProps.border || 0}
                 onClick={() => {
-                    setcurrentElement(id)
+                    setcurrentElement({ id: id, type: 'Shapes' })
                 }}
                 ref={shape}
+                onMouseEnter={(e) => {
+                    const el = e.target
+                    sethover({ isHover: true, stroke: el.strokeWidth() })
+                }}
+                onMouseLeave={(e) => {
+                    sethover({ isHover: false, stroke: 0 })
+                }}
                 draggable
-                onDragStart={(e) => {
+                onDragStart={() => {
                     elementDispatch({ type: ELEMENT_ACTIONS.RESET })
-                    setcurrentElement(id)
+                    setcurrentElement({ id: id, type: 'Shapes' })
                 }}
                 onDragEnd={(e) => {
                     onChange({
@@ -37,6 +61,9 @@ export default function Rectangle({ shapeProps, id, onSelect, onChange }) {
                         sx: parseInt(e.target.x()),
                         sy: parseInt(e.target.y()),
                     })
+                }}
+                onTransformStart={() => {
+                    elementDispatch({ type: ELEMENT_ACTIONS.RESET })
                 }}
                 onTransformEnd={(e) => {
                     const node = shape.current
@@ -49,14 +76,15 @@ export default function Rectangle({ shapeProps, id, onSelect, onChange }) {
                         ...shapeProps,
                         sx: parseInt(node.x()),
                         sy: parseInt(node.y()),
-                        w: Math.max(5, node.width() * scaleX),
-                        h: Math.max(5, node.height() * scaleY),
+                        w: Math.max(5, parseInt(node.width() * scaleX)),
+                        h: Math.max(5, parseInt(node.height() * scaleY)),
                     })
                 }}
             />
-            {currentElement == id && (
+
+            {currentElement.id === id && (
                 <Transform ref={shape} isSelected={true} />
             )}
-        </>
+        </Group>
     )
 }

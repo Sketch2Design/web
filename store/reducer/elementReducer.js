@@ -22,16 +22,14 @@ export const ELEMENT_ACTIONS = {
 /**
  * @typedef {object} action
  * @property {CANVAS_ACTIONS} type
- * @property {item} 
+ * @property {item}
  */
 
 /**
- * @param {item} state 
- * @param {action} action 
- * @returns 
+ * @param {item} state
+ * @param {action} action
+ * @returns
  */
-
-
 
 export function elementReducer(state, action) {
     switch (action.type) {
@@ -39,22 +37,21 @@ export function elementReducer(state, action) {
             return {
                 id: action.id,
                 main: action.main,
-                value: action.value
+                value: action.value,
             }
         }
         case ELEMENT_ACTIONS.UPDATE_VALUE: {
             return {
                 ...state,
-                value: action.value
+                value: action.value,
             }
         }
         case ELEMENT_ACTIONS.RESET: {
             return {
                 id: null,
                 main: null,
-                value: null
+                value: null,
             }
         }
-
     }
 }

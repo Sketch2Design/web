@@ -22,8 +22,7 @@ export default function useMouseMove(ref) {
             canvas.removeEventListener('mousedown', handleMouseDown)
             canvas.removeEventListener('mouseup', handleMouseUp)
         }
-    }, [])    
-
+    }, [])
 
     return [start, end]
 }

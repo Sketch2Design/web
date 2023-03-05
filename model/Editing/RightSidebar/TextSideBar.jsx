@@ -5,7 +5,7 @@ import Dropdown from './Items/Dropdown'
 import IconSelect from './Items/IconSelect'
 import IncreaseDecrease from './Items/IncreaseDecrease'
 
-export default function Sidebar() {
+export default function TextSidebar() {
     return (
         <div className="flex flex-col w-3/12 bg-zinc-800 min-h-full rounded-xl p-4 space-y-4">
             <h4>Text Settings</h4>

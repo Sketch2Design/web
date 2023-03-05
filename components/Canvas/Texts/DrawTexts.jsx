@@ -19,9 +19,9 @@ export default function DrawTexts() {
                         <Text
                             key={item.id}
                             shapeProps={item}
-                            isSelected={item.id === currentElement}
+                            isSelected={item.id === currentElement.id}
                             onSelect={() => {
-                                setcurrentElement(item.id)
+                                setcurrentElement({ id: id, type: 'Texts' })
                             }}
                             onChange={(newAttrs) => {
                                 canvasItemsDispatch({

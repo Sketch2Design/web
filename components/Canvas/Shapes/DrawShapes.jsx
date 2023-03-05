@@ -9,12 +9,9 @@ const SHAPES = {
 }
 
 export default function DrawShapes() {
-    const {
-        canvasItems,
-        canvasItemsDispatch,
-        currentElement,
-        setcurrentElement,
-    } = useCanvasContext()
+    const { canvasItems, canvasItemsDispatch, setcurrentElement } =
+        useCanvasContext()
+
 
     const shapes = useMemo(
         () =>
@@ -27,7 +24,10 @@ export default function DrawShapes() {
                             shapeProps={item}
                             id={item.id}
                             onSelect={() => {
-                                setcurrentElement(item.id)
+                                setcurrentElement({
+                                    id: item.id,
+                                    type: item.main,
+                                })
                             }}
                             onChange={(newAttrs) => {
                                 canvasItemsDispatch({

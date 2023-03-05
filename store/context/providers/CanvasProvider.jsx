@@ -17,7 +17,12 @@ export function useCanvasContext() {
 export default function CanvasProvider({ children }) {
     // canvas items
     const [canvasItems, canvasItemsDispatch] = useReducer(canvasReducer, [])
-    const [currentElement, setcurrentElement] = useState(null)
+
+    const [currentElement, setcurrentElement] = useState({
+        id: null,
+        type: null,
+    })
+    const [canvas, setcanvas] = useState({ size: { w: 600, h: 800 } })
 
     return (
         <CanvasContext.Provider
@@ -26,6 +31,8 @@ export default function CanvasProvider({ children }) {
                 canvasItemsDispatch,
                 currentElement,
                 setcurrentElement,
+                canvas,
+                setcanvas,
             }}
         >
             {children}
