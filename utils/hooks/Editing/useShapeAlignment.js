@@ -28,8 +28,6 @@ export function useShapeAlignment(type) {
     }, [canvasItems])
 
     function checkAlignment() {
-        console.log(currentElement)
-        console.log(type, '->>', canvasItems[currentElement.id - 1])
         if (type == 'horizontal') {
             if (canvasItems[currentElement.id - 1].sx == left) {
                 if (current == 'left') return

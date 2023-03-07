@@ -1,6 +1,6 @@
 import { SIDEBAR_ITMES } from '@/utils/constants/editorInterface.constant'
 import { useShapeAlignment } from '@/utils/hooks/Editing/useShapeAlignment'
-import { useState } from 'react'
+
 import IconSelect from '../IconSelect'
 
 export default function LayoutHorizontalAlignment({ icons }) {

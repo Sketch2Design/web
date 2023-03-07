@@ -25,7 +25,7 @@ export default function Rectangle({ shapeProps, id, onChange }) {
                     y={shapeProps.sy - hover.stroke / 2}
                     fill="transparent"
                     stroke="#810096"
-                    strokeWidth={hover.stroke + 5}
+                    strokeWidth={5}
                 />
             ) : (
                 <></>
@@ -36,15 +36,16 @@ export default function Rectangle({ shapeProps, id, onChange }) {
                 height={shapeProps.h}
                 x={shapeProps.sx}
                 y={shapeProps.sy}
-                fill={shapeProps.fill || 'black'}
-                stroke={shapeProps.borderColor || 'red'}
-                strokeWidth={shapeProps.border || 0}
+                fill={shapeProps.fill}
+                stroke={shapeProps.borderColor}
+                strokeWidth={shapeProps.border}
                 onClick={() => {
                     setcurrentElement({ id: id, type: 'Shapes' })
                 }}
                 ref={shape}
                 onMouseEnter={(e) => {
                     const el = e.target
+                    console.log(el.strokeWidth())
                     sethover({ isHover: true, stroke: el.strokeWidth() })
                 }}
                 onMouseLeave={(e) => {

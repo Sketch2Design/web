@@ -22,6 +22,7 @@ export const CANVAS_ACTIONS = {
  * @property {number} sy
  * @property {number} w
  * @property {number} h
+ * @property {string} fill
  */
 
 /**

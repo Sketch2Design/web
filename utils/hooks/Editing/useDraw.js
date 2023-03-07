@@ -35,6 +35,9 @@ export default function useDraw(ref) {
                     ey: end.y,
                     w: Math.abs(end.x - start.x),
                     h: Math.abs(end.y - start.y),
+                    fill: '#000000',
+                    border: 0,
+                    borderColor: '#440000',
                 },
             })
         } else if (start?.x == end?.x) {

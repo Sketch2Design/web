@@ -13,7 +13,7 @@ export default function Canvas() {
     const { canvas } = useCanvasContext()
 
     return (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="flex h-full w-full items-center justify-center">
             <Stage
                 ref={canvasRef}
                 className="bg-white"
