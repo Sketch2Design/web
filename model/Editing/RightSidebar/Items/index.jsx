@@ -2,7 +2,7 @@ import React, { Children } from 'react'
 
 function Items({ children }) {
     return (
-        <div className="flex flex-col space-y-4">
+        <div className="flex h-full  w-full flex-col space-y-4 overflow-y-auto px-6">
             {Children.map(children, (child) => child)}
         </div>
     )

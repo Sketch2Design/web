@@ -1,29 +1,31 @@
-import { SIDEBAR_ITMES } from '@/utils/constants/editorInterface.constant'
-
 import Items from './Items'
-import Dropdown from './Items/Dropdown'
-import IconSelect from './Items/IconSelect'
-import IncreaseDecrease from './Items/IncreaseDecrease'
+import LayoutHorizontalAlignment from './Items/Alignment/LayoutHorizontalAlignment'
+import LayoutVerticalAlignment from './Items/Alignment/LayoutVerticalAlignment'
+import TextFill from './Items/Fill/TextFill'
+import Font from './Items/Font'
+import Spacing from './Items/Font/Spacing'
+import TextContent from './Items/Font/Text/TextContent'
 
 export default function TextSidebar() {
     return (
-        <div className="flex flex-col w-3/12 bg-zinc-800 min-h-full rounded-xl p-4 space-y-4">
-            <h4>Text Settings</h4>
+        <div className="flex h-full w-full  flex-col space-y-4 ">
+            <h4 className="px-6 text-white">Settings</h4>
             <Items>
                 <Items.Group>
-                    <Dropdown name="Font" />
-                    <Dropdown name="Style" />
-                    <IncreaseDecrease name="Size" />
+                    <LayoutVerticalAlignment />
+                    <LayoutHorizontalAlignment />
                 </Items.Group>
                 <Items.Group>
-                    <IconSelect
-                        name="Horizontal"
-                        icons={SIDEBAR_ITMES.TEXT_ALIGNMENT.HORIZONTAL}
-                    />
-                    <IconSelect
-                        name="Horizontal"
-                        icons={SIDEBAR_ITMES.TEXT_ALIGNMENT.VERTICAL}
-                    />
+                    <TextContent />
+                </Items.Group>
+                <Items.Group>
+                    <Font />
+                </Items.Group>
+                <Items.Group>
+                    <TextFill />
+                </Items.Group>
+                <Items.Group>
+                    <Spacing />
                 </Items.Group>
             </Items>
         </div>

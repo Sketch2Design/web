@@ -6,8 +6,8 @@ import BackgroundFill from './Items/Fill/BackgroundFill'
 
 export default function ShapeSidebar() {
     return (
-        <div className="flex h-full w-full flex-col space-y-4 overflow-y-scroll rounded-xl bg-zinc-800 p-4 ">
-            <h4 className="text-white">Settings</h4>
+        <div className="flex h-full w-full  flex-col space-y-4 ">
+            <h4 className="px-6 text-white">Settings</h4>
             <Items>
                 <Items.Group>
                     <LayoutVerticalAlignment />

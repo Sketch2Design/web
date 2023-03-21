@@ -1,12 +1,12 @@
-import {
-    createContext,
-    useContext,
-    useEffect,
-    useReducer,
-    useState,
-} from 'react'
+import { createContext, useContext, useReducer, useRef, useState } from 'react'
 
 import { canvasReducer } from '@/store/reducer/canvasReducer'
+
+export const ExportContext = createContext(null)
+
+export function useExportContext() {
+    return useContext(ExportContext)
+}
 
 export const CanvasContext = createContext(null)
 
@@ -21,21 +21,30 @@ export default function CanvasProvider({ children }) {
     const [currentElement, setcurrentElement] = useState({
         id: null,
         type: null,
+        value: null,
     })
-    const [canvas, setcanvas] = useState({ size: { w: 600, h: 800 } })
+    const [editText, seteditText] = useState({
+        id: null,
+    })
+
+    //export
+    const [canvas, setcanvas] = useState({ size: { w: 720, h: 720 } })
+    const canvasRef = useRef(null)
 
     return (
-        <CanvasContext.Provider
-            value={{
-                canvasItems,
-                canvasItemsDispatch,
-                currentElement,
-                setcurrentElement,
-                canvas,
-                setcanvas,
-            }}
-        >
-            {children}
-        </CanvasContext.Provider>
+        <ExportContext.Provider value={{ canvas, setcanvas, canvasRef }}>
+            <CanvasContext.Provider
+                value={{
+                    canvasItems,
+                    canvasItemsDispatch,
+                    currentElement,
+                    setcurrentElement,
+                    editText,
+                    seteditText,
+                }}
+            >
+                {children}
+            </CanvasContext.Provider>
+        </ExportContext.Provider>
     )
 }

@@ -1,12 +1,17 @@
 import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
 import ShapeSidebar from './ShapeSideBar'
+import TextSidebar from './TextSideBar'
 
 export default function RightSidebar() {
     const { currentElement } = useCanvasContext()
 
     return (
-        <div className="flex flex-col w-3/12 bg-zinc-800 min-h-full rounded-xl p-4 space-y-4">
-            {currentElement.type === 'Shapes' && <ShapeSidebar />}
+        <div className="absolute right-0 flex h-full w-1/5 flex-col space-y-4  rounded-xl bg-zinc-800 py-4">
+            {currentElement.type === 'Shapes' ? (
+                <ShapeSidebar />
+            ) : (
+                currentElement.type === 'Text' && <TextSidebar />
+            )}
         </div>
     )
 }

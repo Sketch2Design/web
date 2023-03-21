@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 /**
  * @typedef {object} CANVAS_ACTIONS
  * @property {string} ADD
@@ -7,6 +9,7 @@
 
 export const CANVAS_ACTIONS = {
     ADD: 'add_item',
+    ADD_ALL: 'add_all',
     DELETE: 'delete_item',
     UPDATE: 'update_item',
 }
@@ -40,11 +43,16 @@ export const CANVAS_ACTIONS = {
 
 export function canvasReducer(state, action) {
     switch (action.type) {
+        case CANVAS_ACTIONS.ADD_ALL: {
+            return action.values
+        }
         case CANVAS_ACTIONS.ADD: {
-            const id = state[state.length - 1]?.id
-                ? state[state.length - 1]?.id + 1
-                : 1
-            action.current({ id: id, type: action.values.main })
+            const id = uuidv4()
+            action.current({
+                id: id,
+                type: action.values.main,
+                value: action.values.type,
+            })
             return [...state, { id: id, ...action.values }]
         }
 

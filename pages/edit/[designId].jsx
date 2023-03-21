@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 
 import Topbar from '@/model/Editing/Topbar'
@@ -9,10 +10,12 @@ const Canvas = dynamic(() => import('@/components/Canvas'), {
 
 export default function EditingInterface() {
     return (
-        <div className="w-screen h-screen flex flex-col p-4 space-y-4">
+        <div className="flex h-screen max-h-screen w-screen flex-col space-y-4 overflow-hidden p-4">
             <Topbar />
-            <div className="flex justify-between space-x-4 w-full h-full">
-                <Canvas />
+            <div className="relative flex h-full w-full">
+                <Suspense fallback={<div>Loading...</div>}>
+                    <Canvas />
+                </Suspense>
                 <RightSidebar />
             </div>
         </div>

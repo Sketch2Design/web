@@ -22,7 +22,7 @@ export const ELEMENT_ACTIONS = {
 /**
  * @typedef {object} action
  * @property {CANVAS_ACTIONS} type
- * @property {item}
+ * @property {item} values
  */
 
 /**
@@ -34,23 +34,19 @@ export const ELEMENT_ACTIONS = {
 export function elementReducer(state, action) {
     switch (action.type) {
         case ELEMENT_ACTIONS.UPDATE_ALL: {
-            return {
-                id: action.id,
-                main: action.main,
-                value: action.value,
-            }
+            return action.values
         }
         case ELEMENT_ACTIONS.UPDATE_VALUE: {
             return {
                 ...state,
-                value: action.value,
+                type: action.values.type,
             }
         }
         case ELEMENT_ACTIONS.RESET: {
             return {
                 id: null,
                 main: null,
-                value: null,
+                type: null,
             }
         }
     }

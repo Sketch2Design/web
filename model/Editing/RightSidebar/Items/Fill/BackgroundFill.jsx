@@ -5,8 +5,8 @@ import { useColor } from '@/utils/hooks/Editing/useColor'
 import ColorPicker from '@/components/Input/Color/ColorPicker'
 import Fill from '../Fill'
 
-export default function BackgroundFill({ type }) {
-    const [color, setcolor] = useColor(type)
+export default function BackgroundFill() {
+    const [color, setcolor] = useColor()
 
     const [open, setopen] = useState(false)
 

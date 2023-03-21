@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
 export default function useMouseMove(ref) {
-    const [start, setstart] = useState(null)
-    const [end, setend] = useState(null)
+    const [start, setstart] = useState({ x: -1, y: -1 })
+    const [end, setend] = useState({ x: 1, y: 1 })
 
     useEffect(() => {
         function handleMouseDown(e) {

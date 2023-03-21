@@ -19,11 +19,12 @@ export default function Multiple({
         current.id == null
             ? setcurrent({
                   type: ELEMENT_ACTIONS.UPDATE_ALL,
-                  id: id,
-                  main: name,
-                  value: value,
+                  values: { id: id, main: name, type: value },
               })
-            : setcurrent({ type: ELEMENT_ACTIONS.UPDATE_VALUE, value: value })
+            : setcurrent({
+                  type: ELEMENT_ACTIONS.UPDATE_VALUE,
+                  values: { type: value },
+              })
         setopen((prev) => !prev)
         setselected(value)
     }
@@ -31,17 +32,19 @@ export default function Multiple({
     return (
         <div
             className={`${
-                current?.id == id ? 'text-zinc-100' : 'text-zinc-500'
-            } flex flex-col relative cursor-pointer`}
+                current?.id == id ? 'bg-white text-zinc-900' : 'text-zinc-500'
+            } ${
+                open
+                    ? 'rounded-t-md rounded-b-none border border-b-0 border-zinc-700'
+                    : 'rounded-md'
+            } relative flex cursor-pointer flex-col items-center justify-center  bg-zinc-900 p-2`}
         >
-            <div className="flex justify-center items-center w-14">
+            <div className="flex w-14 items-center justify-center">
                 <span
                     onClick={() =>
                         setcurrent({
                             type: ELEMENT_ACTIONS.UPDATE_ALL,
-                            id: id,
-                            main: name,
-                            value: selected,
+                            values: { id: id, main: name, type: selected },
                         })
                     }
                 >
@@ -53,15 +56,21 @@ export default function Multiple({
 
                 <span onClick={() => setopen((prev) => !prev)}>
                     {open ? (
-                        <MdArrowDropUp className="edit_topbar_icon" />
+                        <MdArrowDropUp className="h-6 w-6" />
                     ) : (
-                        <MdArrowDropDown className="edit_topbar_icon" />
+                        <MdArrowDropDown className="h-6 w-6" />
                     )}
                 </span>
             </div>
 
             {open && (
-                <div className="flex flex-col absolute left-px space-y-3 top-10 ">
+                <div
+                    className={`${
+                        current?.id == id
+                            ? 'bg-white text-zinc-900'
+                            : 'border border-t-0 border-zinc-700 bg-zinc-900 text-zinc-500'
+                    } absolute top-10 flex w-[4.5rem] flex-col space-y-3 rounded-b-md pt-1 pb-3 pl-3 `}
+                >
                     {values
                         ?.filter((item) => item.name != selected)
                         ?.map((item) => (

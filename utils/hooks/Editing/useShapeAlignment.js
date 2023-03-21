@@ -1,52 +1,88 @@
-import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
+import { useEffect, useMemo, useState } from 'react'
+
+import {
+    useCanvasContext,
+    useExportContext,
+} from '@/store/context/providers/CanvasProvider'
 import { CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
-import { useEffect, useState } from 'react'
+import { getCurrentElement } from '@/utils/helpers/canvas.helper'
+import { SHAPES } from '@/utils/constants/editorInterface.constant'
 
 export function useShapeAlignment(type) {
-    const { canvasItems, canvasItemsDispatch, currentElement, canvas } =
+    const { canvasItems, canvasItemsDispatch, currentElement } =
         useCanvasContext()
+
+    const { canvas } = useExportContext()
 
     const [current, setcurrent] = useState(null)
 
-    const left = 0
-    const right = canvas.size.w - canvasItems[currentElement.id - 1].w
-    const center = right / 2
-    const top = 0
-    const bottom = canvas.size.h - canvasItems[currentElement.id - 1].h
-    const middle = bottom / 2
+    const position = useMemo(() => {
+        const c = getCurrentElement(canvasItems, currentElement.id)
+        if (c !== null) {
+            const lt =
+                currentElement.value == SHAPES.ELLIPSE
+                    ? 0 + c.width / 2 + c.strokeWidth / 2
+                    : 0 + c.strokeWidth / 2
+            const right =
+                currentElement.value == SHAPES.ELLIPSE
+                    ? canvas.size.w - c.width / 2 - c.strokeWidth / 2
+                    : canvas.size.w - c.width - c.strokeWidth / 2
+            const center =
+                currentElement.value == SHAPES.ELLIPSE
+                    ? canvas.size.w / 2
+                    : right / 2
+            const bottom =
+                currentElement.value == SHAPES.ELLIPSE
+                    ? canvas.size.h - c.width / 2 - c.strokeWidth / 2
+                    : canvas.size.h - c.height - c.strokeWidth / 2
+            const middle =
+                currentElement.value == SHAPES.ELLIPSE
+                    ? canvas.size.h / 2
+                    : bottom / 2
+            return {
+                left: lt,
+                right: right,
+                center: center,
+                top: lt,
+                bottom: bottom,
+                middle: middle,
+            }
+        }
+    }, [currentElement, canvasItems])
 
     useEffect(() => {
         handleAlignment()
     }, [current])
 
     useEffect(() => {
-        checkAlignment()
+        currentElement.id !== null && checkAlignment()
     }, [currentElement])
 
     useEffect(() => {
-        checkAlignment()
+        canvasItems?.length > 0 && checkAlignment()
     }, [canvasItems])
 
     function checkAlignment() {
+        const c = getCurrentElement(canvasItems, currentElement.id)
         if (type == 'horizontal') {
-            if (canvasItems[currentElement.id - 1].sx == left) {
+            if (c.x == position.left) {
                 if (current == 'left') return
                 setcurrent('left')
-            } else if (canvasItems[currentElement.id - 1].sx == right) {
+            } else if (c.x == position.right) {
                 if (current == 'right') return
                 setcurrent('right')
-            } else if (canvasItems[currentElement.id - 1].sx == center) {
+            } else if (c.x == position.center) {
                 if (current == 'center') return
                 setcurrent('center')
             } else setcurrent(null)
         } else if (type == 'vertical') {
-            if (canvasItems[currentElement.id - 1].sy == top) {
+            if (c.y == position.top) {
                 if (current == 'top') return
                 setcurrent('top')
-            } else if (canvasItems[currentElement.id - 1].sy == bottom) {
+            } else if (c.y == position.bottom) {
                 if (current == 'bottom') return
                 setcurrent('bottom')
-            } else if (canvasItems[currentElement.id - 1].sy == middle) {
+            } else if (c.y == position.middle) {
                 if (current == 'middle') return
                 setcurrent('middle')
             } else setcurrent(null)
@@ -58,25 +94,25 @@ export function useShapeAlignment(type) {
         if (type == 'horizontal') {
             switch (current) {
                 case 'left':
-                    updateValues.sx = left
+                    updateValues.x = position.left
                     break
                 case 'center':
-                    updateValues.sx = center
+                    updateValues.x = position.center
                     break
                 case 'right':
-                    updateValues.sx = right
+                    updateValues.x = position.right
                     break
             }
         } else if (type == 'vertical') {
             switch (current) {
                 case 'top':
-                    updateValues.sy = top
+                    updateValues.y = position.top
                     break
                 case 'middle':
-                    updateValues.sy = middle
+                    updateValues.y = position.middle
                     break
                 case 'bottom':
-                    updateValues.sy = bottom
+                    updateValues.y = position.bottom
                     break
             }
         }

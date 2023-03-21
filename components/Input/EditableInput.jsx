@@ -12,11 +12,10 @@ const EditableInput = forwardRef(function EditableInput(
                 w || 'w-5/12'
             } justify-center rounded-lg border-2 border-transparent bg-transparent  px-2 font-bold outline-none hover:border-zinc-700
               focus:border-violet-600`}
-            defaultValue={defaultValue}
             maxLength={6}
-            onChange={(e) => {
-                onChange(e.target.value)
-            }}
+            value={defaultValue ?? ''}
+            onFocus={(e) => e.target.select()}
+            onChange={(e) => onChange(e)}
         />
     )
 })

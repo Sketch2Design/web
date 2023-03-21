@@ -16,12 +16,16 @@ import {
     MdOutlineAlignVerticalTop,
     MdOutlineAlignVerticalBottom,
     MdOutlineAlignVerticalCenter,
+    MdFormatItalic,
+    MdFormatBold,
+    MdFormatUnderlined,
 } from 'react-icons/md'
 
 // ------------------------------------------- Elements ------------------------------------------------
 export const SHAPES = {
     RECTANGLE: 'Rectangle',
     CIRCLE: 'Circle',
+    ELLIPSE: 'Ellipse',
     POLYGON: 'Polygon',
 }
 
@@ -35,7 +39,7 @@ export const TOPBAR_ITMES = {
         },
         {
             id: 0,
-            name: SHAPES.CIRCLE,
+            name: SHAPES.ELLIPSE,
             icon: <FaRegCircle className="edit_topbar_icon_mini" />,
         },
         {
@@ -46,6 +50,7 @@ export const TOPBAR_ITMES = {
     ],
 }
 
+//-------------------------------------------------------------- Sidebar -------------------------------------------------------------
 export const SIDEBAR_ITMES = {
     TEXT_ALIGNMENT: {
         HORIZONTAL: [
@@ -128,3 +133,18 @@ export const SIDEBAR_ITMES = {
         ],
     },
 }
+
+export const FONT_FORMAT_ITEMS = [
+    {
+        name: 'bold',
+        icon: <MdFormatBold className="edit_topbar_icon_nano" />,
+    },
+    {
+        name: 'underline',
+        icon: <MdFormatUnderlined className="edit_topbar_icon_nano" />,
+    },
+    {
+        name: 'italic',
+        icon: <MdFormatItalic className="edit_topbar_icon_nano" />,
+    },
+]
