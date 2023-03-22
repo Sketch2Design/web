@@ -94,25 +94,65 @@ export default function useSubscribe() {
     // }
 
     // // ------------------------------------------------------------ send node changes via broadcast -----------------------------------------------------------
+    // useEffect(() => {
+    //     console.log('send node changes')
+    //     const id = router.query.designId
+    //     const channel = supabase.channel(id, {
+    //         config: {
+    //             broadcast: {
+    //                 ack: true,
+    //             },
+    //         },
+    //     })
+    //     sendNodeChanges(channel)
+    //     // return () => {
+    //     //     supabase.removeChannel(channel)
+    //     // }
+    // }, [canvasItems])
+
+    // function sendNodeChanges(channel) {
+    //     const user = router.query?.user
+
+    //     channel.subscribe(async (status) => {
+    //         console.log(status)
+    //         if (status === 'SUBSCRIBED') {
+    //             const c = getCurrentElement(canvasItems, currentElement.id)
+    //             const resp = await channel.send({
+    //                 type: 'broadcast',
+    //                 event: BROADCAST_EVENTS.UPDATE_NODE,
+    //                 payload: { user: user, current: c },
+    //             })
+    //             console.log('response node changes: ', resp)
+    //         }
+    //     })
+    // }
+
+    // ------------------------------------------------------------ get canvas node changes via broadcast -----------------------------------------------------------
     useEffect(() => {
-        console.log('send node changes')
         const id = router.query.designId
-        const channel = supabase.channel(id, {
-            config: {
-                broadcast: {
-                    ack: true,
-                },
-            },
-        })
-        sendNodeChanges(channel)
-        // return () => {
-        //     supabase.removeChannel(channel)
-        // }
+        const channel = supabase.channel(id)
+        nodeChanges(channel)
+        return () => {
+            supabase.removeChannel(channel)
+        }
     }, [canvasItems])
 
-    function sendNodeChanges(channel) {
-        const user = router.query?.user
-
+    function nodeChanges(channel) {
+        console.log('canvas node chnage')
+        channel.on(
+            'broadcast',
+            { event: BROADCAST_EVENTS.UPDATE_NODE },
+            (payload) => {
+                console.log(payload.payload.current.id)
+                canvasItemsDispatch({
+                    type: CANVAS_ACTIONS.UPDATE,
+                    values: {
+                        id: payload.payload.current.id,
+                        ...payload.payload.current,
+                    },
+                })
+            }
+        )
         channel.subscribe(async (status) => {
             console.log(status)
             if (status === 'SUBSCRIBED') {
@@ -125,36 +165,6 @@ export default function useSubscribe() {
                 console.log('response node changes: ', resp)
             }
         })
-    }
-
-    // ------------------------------------------------------------ get canvas node changes via broadcast -----------------------------------------------------------
-    useEffect(() => {
-        const id = router.query.designId
-        const channel = supabase.channel(id)
-        getNodeChanges(channel)
-        // return () => {
-        //     supabase.removeChannel(channel)
-        // }
-    }, [])
-
-    function getNodeChanges(channel) {
-        console.log('get canvas node chnage')
-        channel
-            .on(
-                'broadcast',
-                { event: BROADCAST_EVENTS.UPDATE_NODE },
-                (payload) => {
-                    console.log(payload.payload.current.id)
-                    canvasItemsDispatch({
-                        type: CANVAS_ACTIONS.UPDATE,
-                        values: {
-                            id: payload.payload.current.id,
-                            ...payload.payload.current,
-                        },
-                    })
-                }
-            )
-            .subscribe()
     }
 }
 
