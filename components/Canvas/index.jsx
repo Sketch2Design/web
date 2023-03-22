@@ -16,7 +16,7 @@ export default function Canvas() {
     const { canvas, canvasRef } = useExportContext()
 
     const reset = useDrawNode(canvasRef)
-    const handleKeyPress = useKeyPress(canvasRef)
+    // const handleKeyPress = useKeyPress(canvasRef)
     useDesign()
     useSubscribe()
 
@@ -24,7 +24,7 @@ export default function Canvas() {
         <div
             className="absolute mr-40 flex h-full w-4/5 items-center justify-center outline-none "
             tabIndex={0}
-            onKeyDown={handleKeyPress}
+            // onKeyDown={handleKeyPress}
         >
             <div
                 className="relative flex items-center justify-center  "

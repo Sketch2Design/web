@@ -148,3 +148,10 @@ export const FONT_FORMAT_ITEMS = [
         icon: <MdFormatItalic className="edit_topbar_icon_nano" />,
     },
 ]
+
+// ------------------------------------------------------------broadcase -------------------------------------------------------------
+
+export const BROADCAST_EVENTS = {
+    CURRENT_NODE: 'current_node',
+    UPDATE_NODE: 'update_node',
+}
