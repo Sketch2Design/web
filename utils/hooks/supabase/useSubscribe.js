@@ -160,7 +160,7 @@ export default function useSubscribe() {
                 const resp = await channel.send({
                     type: 'broadcast',
                     event: BROADCAST_EVENTS.UPDATE_NODE,
-                    payload: { user: user, current: c },
+                    payload: { current: c },
                 })
                 console.log('response node changes: ', resp)
             }
