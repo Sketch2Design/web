@@ -36,37 +36,37 @@ export default function useSubscribe() {
     }
 
     // ------------------------------------------------------------ send current node via broadcast -----------------------------------------------------------
-    useEffect(() => {
-        console.log('send current node')
-        const id = router.query.designId
-        const channel = supabase.channel(id, {
-            config: {
-                broadcast: {
-                    ack: true,
-                },
-            },
-        })
-        sendCurrentNode(channel)
-        return () => {
-            supabase.removeChannel(channel)
-        }
-    }, [currentElement])
+    // useEffect(() => {
+    //     console.log('send current node')
+    //     const id = router.query.designId
+    //     const channel = supabase.channel(id, {
+    //         config: {
+    //             broadcast: {
+    //                 ack: true,
+    //             },
+    //         },
+    //     })
+    //     sendCurrentNode(channel)
+    //     return () => {
+    //         supabase.removeChannel(channel)
+    //     }
+    // }, [currentElement])
 
-    function sendCurrentNode(channel) {
-        const user = router.query?.user
+    // function sendCurrentNode(channel) {
+    //     const user = router.query?.user
 
-        channel.subscribe(async (status) => {
-            console.log(status)
-            if (status === 'SUBSCRIBED') {
-                const resp = await channel.send({
-                    type: 'broadcast',
-                    event: BROADCAST_EVENTS.CURRENT_NODE,
-                    payload: { user: user, current: currentElement.id },
-                })
-                console.log('response current node', resp)
-            }
-        })
-    }
+    //     channel.subscribe(async (status) => {
+    //         console.log(status)
+    //         if (status === 'SUBSCRIBED') {
+    //             const resp = await channel.send({
+    //                 type: 'broadcast',
+    //                 event: BROADCAST_EVENTS.CURRENT_NODE,
+    //                 payload: { user: user, current: currentElement.id },
+    //             })
+    //             console.log('response current node', resp)
+    //         }
+    //     })
+    // }
 
     // // ------------------------------------------------------------ get current node via broadcast -----------------------------------------------------------
     // useEffect(() => {
@@ -94,38 +94,38 @@ export default function useSubscribe() {
     // }
 
     // // ------------------------------------------------------------ send node changes via broadcast -----------------------------------------------------------
-    // useEffect(() => {
-    //     console.log('send node changes')
-    //     const id = router.query.designId
-    //     const channel = supabase.channel(id, {
-    //         config: {
-    //             broadcast: {
-    //                 ack: true,
-    //             },
-    //         },
-    //     })
-    //     sendNodeChanges(channel)
-    //     return () => {
-    //         supabase.removeChannel(channel)
-    //     }
-    // }, [canvasItems])
+    useEffect(() => {
+        console.log('send node changes')
+        const id = router.query.designId
+        const channel = supabase.channel(id, {
+            config: {
+                broadcast: {
+                    ack: true,
+                },
+            },
+        })
+        sendNodeChanges(channel)
+        // return () => {
+        //     supabase.removeChannel(channel)
+        // }
+    }, [canvasItems])
 
-    // function sendNodeChanges(channel) {
-    //     const user = router.query?.user
+    function sendNodeChanges(channel) {
+        const user = router.query?.user
 
-    //     channel.subscribe(async (status) => {
-    //         console.log(status)
-    //         if (status === 'SUBSCRIBED') {
-    //             const c = getCurrentElement(canvasItems, currentElement.id)
-    //             const resp = await channel.send({
-    //                 type: 'broadcast',
-    //                 event: BROADCAST_EVENTS.UPDATE_NODE,
-    //                 payload: { user: user, current: c },
-    //             })
-    //             console.log('response node changes: ', resp)
-    //         }
-    //     })
-    // }
+        channel.subscribe(async (status) => {
+            console.log(status)
+            if (status === 'SUBSCRIBED') {
+                const c = getCurrentElement(canvasItems, currentElement.id)
+                const resp = await channel.send({
+                    type: 'broadcast',
+                    event: BROADCAST_EVENTS.UPDATE_NODE,
+                    payload: { user: user, current: c },
+                })
+                console.log('response node changes: ', resp)
+            }
+        })
+    }
 
     // ------------------------------------------------------------ get canvas node changes via broadcast -----------------------------------------------------------
     useEffect(() => {
@@ -133,9 +133,9 @@ export default function useSubscribe() {
         const id = router.query.designId
         const channel = supabase.channel(id)
         getNodeChanges(channel)
-        return () => {
-            supabase.removeChannel(channel)
-        }
+        // return () => {
+        //     supabase.removeChannel(channel)
+        // }
     }, [])
 
     function getNodeChanges(channel) {
