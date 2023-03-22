@@ -129,7 +129,6 @@ export default function useSubscribe() {
 
     // ------------------------------------------------------------ get canvas node changes via broadcast -----------------------------------------------------------
     useEffect(() => {
-        console.log('get canvas node chnage')
         const id = router.query.designId
         const channel = supabase.channel(id)
         getNodeChanges(channel)
@@ -139,17 +138,18 @@ export default function useSubscribe() {
     }, [])
 
     function getNodeChanges(channel) {
+        console.log('get canvas node chnage')
         channel
             .on(
                 'broadcast',
                 { event: BROADCAST_EVENTS.UPDATE_NODE },
                 (payload) => {
-                    console.log(payload)
+                    console.log(payload.payload.current.id)
                     canvasItemsDispatch({
                         type: CANVAS_ACTIONS.UPDATE,
                         values: {
                             id: payload.payload.current.id,
-                            fill: payload.payload.current,
+                            ...payload.payload.current,
                         },
                     })
                 }

@@ -8,6 +8,7 @@ export default function Fill({
     h,
     w,
 }) {
+    console.log(color)
     return (
         <div className="flex items-center space-x-4">
             <div

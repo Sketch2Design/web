@@ -4,7 +4,6 @@ import { useColor } from '@/utils/hooks/Editing/useColor'
 
 import ColorPicker from '@/components/Input/Color/ColorPicker'
 import Fill from '../Fill'
-import useText from '@/utils/hooks/Editing/Text/useText'
 
 export default function TextFill() {
     const [color, setcolor] = useColor()
