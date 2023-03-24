@@ -14,7 +14,16 @@ export function useCanvasContext() {
     return useContext(CanvasContext)
 }
 
+export const ExternalCanvasContext = createContext(null)
+
+export function useExternalCanvasContext() {
+    return useContext(ExternalCanvasContext)
+}
+
 export default function CanvasProvider({ children }) {
+    //external canvas
+    const [externalCurrent, setexternalCurrent] = useState()
+
     // canvas items
     const [canvasItems, canvasItemsDispatch] = useReducer(canvasReducer, [])
 
@@ -43,7 +52,11 @@ export default function CanvasProvider({ children }) {
                     seteditText,
                 }}
             >
-                {children}
+                <ExternalCanvasContext.Provider
+                    value={{ externalCurrent, setexternalCurrent }}
+                >
+                    {children}
+                </ExternalCanvasContext.Provider>
             </CanvasContext.Provider>
         </ExportContext.Provider>
     )
