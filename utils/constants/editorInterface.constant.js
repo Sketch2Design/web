@@ -18,12 +18,11 @@ import {
     MdOutlineAlignVerticalCenter,
 } from 'react-icons/md'
 
-
 // ------------------------------------------- Elements ------------------------------------------------
 export const SHAPES = {
     RECTANGLE: 'Rectangle',
     CIRCLE: 'Circle',
-    POLYGON: 'Polygon'
+    POLYGON: 'Polygon',
 }
 
 // ------------------------------------------- Topbar -----------------------------------------------------

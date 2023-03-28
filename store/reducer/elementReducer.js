@@ -5,28 +5,26 @@ export const ACTIONS = {
     CURRENT: 'get_current',
 }
 
-
-
 export function elementReducer(state, action) {
     switch (action.type) {
         case ACTIONS.UPDATE_ALL: {
             return {
                 id: action.id,
                 main: action.main,
-                value: action.value
+                value: action.value,
             }
         }
         case ACTIONS.UPDATE_VALUE: {
             return {
                 ...state,
-                value: action.value
+                value: action.value,
             }
         }
         case ACTIONS.RESET: {
             return {
                 id: null,
                 main: null,
-                value: null
+                value: null,
             }
         }
         case ACTIONS.CURRENT: {

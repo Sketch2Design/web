@@ -5,7 +5,7 @@ export default function Header() {
     return (
         <div className="flex justify-between items-center w-full h-20 font-bold text-2xl">
             <h5>Hello Usama</h5>
-            <Button value="Create a design" />
+            <Button value="Create a design"/>
         </div>
     )
 }
