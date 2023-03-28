@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer, useRef, useState } from 'react'
 
-import { canvasReducer } from '@/store/reducer/canvasReducer'
+import { canvasReducer, currentReducer } from '@/store/reducer/canvasReducer'
 
 export const ExportContext = createContext(null)
 
@@ -22,19 +22,19 @@ export function useExternalCanvasContext() {
 
 export default function CanvasProvider({ children }) {
     //external canvas
-    const [externalCurrent, setexternalCurrent] = useState()
+
+    const [externalCurrent, externalCurrentDispatch] = useReducer(
+        currentReducer,
+        { id: null, values: null, update: false }
+    )
 
     // canvas items
     const [canvasItems, canvasItemsDispatch] = useReducer(canvasReducer, [])
-
-    const [currentElement, setcurrentElement] = useState({
-        id: null,
-        type: null,
-        value: null,
-    })
-    const [editText, seteditText] = useState({
-        id: null,
-    })
+    currentReducer
+    const [currentElement, currentElementDispatch] = useReducer(
+        currentReducer,
+        { id: null, values: null, update: false }
+    )
 
     //export
     const [canvas, setcanvas] = useState({ size: { w: 720, h: 720 } })
@@ -47,13 +47,11 @@ export default function CanvasProvider({ children }) {
                     canvasItems,
                     canvasItemsDispatch,
                     currentElement,
-                    setcurrentElement,
-                    editText,
-                    seteditText,
+                    currentElementDispatch,
                 }}
             >
                 <ExternalCanvasContext.Provider
-                    value={{ externalCurrent, setexternalCurrent }}
+                    value={{ externalCurrent, externalCurrentDispatch }}
                 >
                     {children}
                 </ExternalCanvasContext.Provider>

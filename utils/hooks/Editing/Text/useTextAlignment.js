@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
 import { CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
-import { getCurrentElement } from '@/utils/helpers/canvas.helper'
 
 export function useShapeAlignment(type) {
     const { canvasItems, canvasItemsDispatch, currentElement, canvas } =

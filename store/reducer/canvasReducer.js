@@ -1,12 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
 
-/**
- * @typedef {object} CANVAS_ACTIONS
- * @property {string} ADD
- * @property {string} DELETE
- * @property {string} UPDATE
- */
-
 export const CANVAS_ACTIONS = {
     ADD: 'add_item',
     ADD_ALL: 'add_all',
@@ -14,32 +7,12 @@ export const CANVAS_ACTIONS = {
     UPDATE: 'update_item',
 }
 
-/**
- * @typedef {object} item
- * @property {number} id
- * @property {string} main
- * @property {string} value
- * @property {number} sx
- * @property {number} sy
- * @property {number} ex
- * @property {number} sy
- * @property {number} w
- * @property {number} h
- * @property {string} fill
- */
-
-/**
- * @typedef {object} action
- * @property {CANVAS_ACTIONS} type
- * @property {item} values
- * @property {callback} current
- */
-
-/**
- * @param {item[]} state
- * @param {action} action
- * @returns
- */
+export const CURRENT_ACTIONS = {
+    CHANGE: 'change_current_item',
+    UPDATE: 'update_values',
+    FORCE: 'force_update_canvas_values',
+    RESET: 'reset',
+}
 
 export function canvasReducer(state, action) {
     switch (action.type) {
@@ -49,9 +22,9 @@ export function canvasReducer(state, action) {
         case CANVAS_ACTIONS.ADD: {
             const id = uuidv4()
             action.current({
+                type: CURRENT_ACTIONS.CHANGE,
                 id: id,
-                type: action.values.main,
-                value: action.values.type,
+                values: action.values,
             })
             return [...state, { id: id, ...action.values }]
         }
@@ -69,6 +42,26 @@ export function canvasReducer(state, action) {
                 (item) => item.id !== action.values.id
             )
             return filtered
+        }
+    }
+}
+
+export function currentReducer(state, action) {
+    switch (action.type) {
+        case CURRENT_ACTIONS.CHANGE: {
+            return { id: action.id, values: action.values, update: false }
+        }
+
+        case CURRENT_ACTIONS.UPDATE: {
+            return { ...state, values: { ...state.values, ...action.values } }
+        }
+
+        case CURRENT_ACTIONS.FORCE: {
+            return { ...state, update: true }
+        }
+
+        case CURRENT_ACTIONS.RESET: {
+            return { id: null, values: null, update: false }
         }
     }
 }

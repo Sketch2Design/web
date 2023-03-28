@@ -7,11 +7,11 @@ import {
 import { useElementContext } from '@/store/context/providers/ElementProvider'
 import { ELEMENT_ACTIONS } from '@/store/reducer/elementReducer'
 
-import { CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
+import { CANVAS_ACTIONS, CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 
 export default function useDrawNode(ref) {
     const { canvas } = useExportContext()
-    const { canvasItemsDispatch, setcurrentElement, currentElement } =
+    const { canvasItemsDispatch, currentElementDispatch, currentElement } =
         useCanvasContext()
     const { element, elementDispatch } = useElementContext()
 
@@ -41,7 +41,7 @@ export default function useDrawNode(ref) {
                 values.wrap = 'none'
             }
             canvasItemsDispatch({
-                current: setcurrentElement,
+                current: currentElementDispatch,
                 type: CANVAS_ACTIONS.ADD,
                 values: values,
             })
@@ -54,7 +54,7 @@ export default function useDrawNode(ref) {
             ref.current.mouseClickEndShape == null &&
             currentElement.id !== null
         ) {
-            setcurrentElement({ id: null, type: null, value: null })
+            currentElementDispatch({ type: CURRENT_ACTIONS.FORCE })
         }
     }
 

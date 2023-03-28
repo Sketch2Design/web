@@ -22,7 +22,9 @@ function BorderStyle({ width, setborder }) {
                         ...prev,
                         width: val === '' ? 0 : parseInt(val),
                     }))
-                    val === '' && (inputRef.current.value = 0)
+                    console.log(parseInt(val) < 0)
+                    if (val === '' || parseInt(val) < 0)
+                        inputRef.current.value = 0
                 }}
             />
         </div>

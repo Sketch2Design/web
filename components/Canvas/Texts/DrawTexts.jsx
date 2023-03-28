@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react'
 
 import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
 import { useElementContext } from '@/store/context/providers/ElementProvider'
-import { CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
+import { CANVAS_ACTIONS, CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 import { ELEMENT_ACTIONS } from '@/store/reducer/elementReducer'
 
 import Text from './Text'
@@ -13,7 +13,7 @@ export default function DrawTexts() {
     const {
         canvasItems,
         canvasItemsDispatch,
-        setcurrentElement,
+        currentElementDispatch,
         currentElement,
     } = useCanvasContext()
     const { elementDispatch } = useElementContext()
@@ -28,7 +28,10 @@ export default function DrawTexts() {
     const text = useMemo(
         () =>
             canvasItems?.map((item) => {
-                if (item.main == 'Text') {
+                if (
+                    item.main == 'Text' &&
+                    item.id !== currentElement.values?.id
+                ) {
                     return (
                         <Text
                             key={item.id}
@@ -37,10 +40,10 @@ export default function DrawTexts() {
                             events={{
                                 onClick: () => {
                                     if (currentElement?.id !== item.id) {
-                                        setcurrentElement({
+                                        currentElementDispatch({
+                                            type: CURRENT_ACTIONS.CHANGE,
                                             id: item.id,
-                                            type: item.main,
-                                            value: item.type,
+                                            values: item.type,
                                         })
                                     }
                                 },
@@ -48,10 +51,10 @@ export default function DrawTexts() {
                                     elementDispatch({
                                         type: ELEMENT_ACTIONS.RESET,
                                     })
-                                    setcurrentElement({
+                                    currentElementDispatch({
+                                        type: CURRENT_ACTIONS.CHANGE,
                                         id: item.id,
-                                        type: item.main,
-                                        value: item.type,
+                                        values: item.type,
                                     })
                                 },
                                 onDragEnd(e) {
@@ -68,27 +71,27 @@ export default function DrawTexts() {
                                         type: ELEMENT_ACTIONS.RESET,
                                     })
                                 },
-                                // onTransform(e) {
-                                //     const node = e.target
+                                onTransform(e) {
+                                    const node = e.target
 
-                                //     const scaleX = node.scaleX()
+                                    const scaleX = node.scaleX()
 
-                                //     node.scaleX(1)
-                                //     node.scaleY(1)
+                                    node.scaleX(1)
+                                    node.scaleY(1)
 
-                                //     // console.log(node.getTextWidth(), width)
-                                //     onChange(
-                                //         {
-                                //             x: parseInt(node.x()),
-                                //             y: parseInt(node.y()),
-                                //             width: Math.max(
-                                //                 node.width() * scaleX,
-                                //                 24
-                                //             ),
-                                //         },
-                                //         item.id
-                                //     )
-                                // },
+                                    // console.log(node.getTextWidth(), width)
+                                    onChange(
+                                        {
+                                            x: parseInt(node.x()),
+                                            y: parseInt(node.y()),
+                                            width: Math.max(
+                                                node.width() * scaleX,
+                                                24
+                                            ),
+                                        },
+                                        item.id
+                                    )
+                                },
                                 onTransformEnd(e) {
                                     const node = e.target
 

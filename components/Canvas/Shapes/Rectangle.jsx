@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Group, Rect } from 'react-konva'
+import { Rect } from 'react-konva'
 
 import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
 
@@ -14,7 +14,7 @@ export default function Rectangle({ shapeProps, id, events }) {
     const { currentElement } = useCanvasContext()
 
     return (
-        <Group>
+        <>
             {currentElement.id !== id && <Hover hover={hover} />}
             <Rect
                 ref={shape}
@@ -27,12 +27,12 @@ export default function Rectangle({ shapeProps, id, events }) {
                 onMouseLeave={() => {
                     sethover({ isHover: false, values: {} })
                 }}
-                draggable
+                draggable={currentElement.id === id ? true : false}
             />
 
             {currentElement.id === id && (
                 <Transform ref={shape} isSelected={true} />
             )}
-        </Group>
+        </>
     )
 }

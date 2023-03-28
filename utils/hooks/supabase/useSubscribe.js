@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import supabase from 'supabase'
 
@@ -6,41 +6,47 @@ import {
     useCanvasContext,
     useExternalCanvasContext,
 } from '@/store/context/providers/CanvasProvider'
-import { CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
+import { CURRENT_ACTIONS, CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
 import { BROADCAST_EVENTS } from '@/utils/constants/editorInterface.constant'
-import { getCurrentElement } from '@/utils/helpers/canvas.helper'
 
 export default function useSubscribe() {
-    const { canvasItems, canvasItemsDispatch, currentElement } =
+    const { currentElement, currentElementDispatch, canvasItemsDispatch } =
         useCanvasContext()
 
-    const { externalCurrent, setexternalCurrent } = useExternalCanvasContext()
+    const { externalCurrent, externalCurrentDispatch } =
+        useExternalCanvasContext()
 
     const router = useRouter()
 
-    // -------------------------------------------------------------- update changes to database --------------------------------------------------------
+    // change canvas items only after the current element changes to null or new element
     useEffect(() => {
-        const ac = new AbortController()
-
-        canvasItems.length !== 0 && updateCanvasItems(ac.signal)
-
-        return () => {
-            ac.abort()
+        if (currentElement.update) {
+            canvasItemsDispatch({
+                type: CANVAS_ACTIONS.UPDATE,
+                values: currentElement.values,
+            })
+            currentElementDispatch({
+                type: CURRENT_ACTIONS.RESET,
+            })
         }
-    }, [canvasItems])
+    }, [currentElement.update])
 
-    async function updateCanvasItems(signal) {
-        const { data, error } = await supabase
-            .from('design')
-            .update({ canvas_items: { items: canvasItems } })
-            .eq('id', router.query.designId)
-            .abortSignal(signal)
-    }
+    useEffect(() => {
+        if (externalCurrent.update && externalCurrent.id !== null) {
+            canvasItemsDispatch({
+                type: CANVAS_ACTIONS.UPDATE,
+                values: externalCurrent.values,
+            })
+            externalCurrentDispatch({
+                type: CURRENT_ACTIONS.RESET,
+            })
+        }
+    }, [externalCurrent.update])
 
     // ------------------------------------------------------------ send current node via broadcast -----------------------------------------------------------
     useEffect(() => {
         const id = router.query.designId
-        const channel = supabase.channel(id, {
+        const channel = supabase.channel(id + 'change', {
             config: {
                 broadcast: {
                     ack: true,
@@ -52,63 +58,94 @@ export default function useSubscribe() {
             'broadcast',
             { event: BROADCAST_EVENTS.CURRENT_NODE },
             (payload) => {
-                setexternalCurrent(payload?.payload?.current)
+                externalCurrentDispatch({
+                    type: CURRENT_ACTIONS.CHANGE,
+                    id: payload?.payload?.id,
+                    values: payload?.payload?.values,
+                })
             }
         )
+        channel.on('broadcast', { event: BROADCAST_EVENTS.RESET_NODE }, () => {
+            console.log('reset')
+            externalCurrentDispatch({ type: CURRENT_ACTIONS.FORCE })
+        })
 
-        channel.on(
-            'broadcast',
-            { event: BROADCAST_EVENTS.UPDATE_NODE },
-            (payload) => {
-                const values = payload.payload.current
-                const c = getCurrentElement(canvasItems, externalCurrent)
-
-                if (JSON.stringify(c) !== JSON.stringify(values)) {
-                    console.log('run dispatch')
-                    canvasItemsDispatch({
-                        type: CANVAS_ACTIONS.UPDATE,
-                        values: {
-                            id: externalCurrent,
-                            ...values,
-                        },
-                    })
-                }
+        channel.subscribe(async (status) => {
+            if (status === 'SUBSCRIBED') {
+                console.log('current change')
+                if (currentElement.id !== null) sendCurrentNode(channel)
+                else if (currentElement.id === null) resetNode(channel)
             }
-        )
+        })
 
-        currentElement?.id !== null && sendCurrentNode(channel)
-
-        function sendCurrentNode(channel) {
+        async function sendCurrentNode(channel) {
             const user = router.query?.user
-            channel.subscribe(async (status) => {
-                console.log('external')
-                if (status === 'SUBSCRIBED') {
-                    if (current !== externalCurrent) {
-                        const c = getCurrentElement(
-                            canvasItems,
-                            currentElement.id
-                        )
-                        await channel.send({
-                            type: 'broadcast',
-                            event: BROADCAST_EVENTS.UPDATE_NODE,
-                            payload: { current: c },
-                        })
-                    }
-                    await channel.send({
-                        type: 'broadcast',
-                        event: BROADCAST_EVENTS.CURRENT_NODE,
-                        payload: {
-                            user: user,
-                            current: currentElement?.id,
-                        },
-                    })
-                }
+            await channel.send({
+                type: 'broadcast',
+                event: BROADCAST_EVENTS.CURRENT_NODE,
+                payload: {
+                    user: user,
+                    id: currentElement.id,
+                    values: currentElement.values,
+                },
+            })
+        }
+
+        async function resetNode(channel) {
+            await channel.send({
+                type: 'broadcast',
+                event: BROADCAST_EVENTS.RESET_NODE,
+                payload: {
+                    reset: true,
+                },
             })
         }
 
         return () => {
             supabase.removeChannel(channel)
         }
-        //canvasItems.filter((item) => item.id === externalCurrent)[0]
-    }, [currentElement, canvasItems])
+    }, [currentElement.id])
+
+    // canvas items changes
+    useEffect(() => {
+        const id = router.query.designId
+        const channel = supabase.channel(id + ':update', {
+            config: {
+                broadcast: {
+                    ack: true,
+                },
+            },
+        })
+
+        channel.on(
+            'broadcast',
+            { event: BROADCAST_EVENTS.UPDATE_NODE },
+            (payload) => {
+                console.log('run dispatch')
+                const values = payload.payload.values
+                externalCurrentDispatch({
+                    type: CURRENT_ACTIONS.UPDATE,
+                    values: values,
+                })
+            }
+        )
+
+        channel.subscribe(async (status) => {
+            const user = router.query?.user
+            if (status === 'SUBSCRIBED') {
+                await channel.send({
+                    type: 'broadcast',
+                    event: BROADCAST_EVENTS.UPDATE_NODE,
+                    payload: {
+                        user: user,
+                        values: currentElement.values,
+                    },
+                })
+            }
+        })
+
+        return () => {
+            supabase.removeChannel(channel)
+        }
+    }, [currentElement.values])
 }

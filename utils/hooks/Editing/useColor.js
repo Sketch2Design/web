@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react'
 
 import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
-import { CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
-import { getCurrentElement } from '@/utils/helpers/canvas.helper'
+import { CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 
 export function useColor() {
-    const { canvasItems, canvasItemsDispatch, currentElement } =
-        useCanvasContext()
+    const { currentElementDispatch, currentElement } = useCanvasContext()
 
     const [color, setcolor] = useState(() => {
-        const c = getCurrentElement(canvasItems, currentElement.id)
-        return c?.fill || '#000000'
+        return currentElement?.values?.fill || '#000000'
     })
 
     useEffect(() => {
@@ -18,9 +15,9 @@ export function useColor() {
     }, [color])
 
     function changeColor() {
-        canvasItemsDispatch({
-            type: CANVAS_ACTIONS.UPDATE,
-            values: { id: currentElement.id, fill: color },
+        currentElementDispatch({
+            type: CURRENT_ACTIONS.UPDATE,
+            values: { fill: color },
         })
     }
 

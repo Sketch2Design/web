@@ -1,22 +1,27 @@
 import { Layer, Stage } from 'react-konva'
 
-import { useExportContext } from '@/store/context/providers/CanvasProvider'
+import {
+    useCanvasContext,
+    useExportContext,
+    useExternalCanvasContext,
+} from '@/store/context/providers/CanvasProvider'
 import useDrawNode from '@/utils/hooks/Editing/useDrawNode'
 import useKeyPress from '@/utils/hooks/Editing/useKeyPress'
-import useDesign from '@/utils/hooks/supabase/useDesign'
+import useDesign from '@/utils/hooks/Editing/useDesign'
 import useSubscribe from '@/utils/hooks/supabase/useSubscribe'
 
 import DrawShapes from './Shapes/DrawShapes'
 import DrawTexts from './Texts/DrawTexts'
-
-// todo
-// implement layer context and canvas context to reduce re renders
+import CurrentShape from './Shapes/CurrentShape'
+import ExternalCurrentShape from './Shapes/ExternalCurrentShape'
 
 export default function Canvas() {
     const { canvas, canvasRef } = useExportContext()
+    const { currentElement } = useCanvasContext()
+    const { externalCurrent } = useExternalCanvasContext()
 
     const reset = useDrawNode(canvasRef)
-    // const handleKeyPress = useKeyPress(canvasRef)
+    const handleKeyPress = useKeyPress(canvasRef)
     useDesign()
     useSubscribe()
 
@@ -24,7 +29,7 @@ export default function Canvas() {
         <div
             className="absolute mr-40 flex h-full w-4/5 items-center justify-center outline-none "
             tabIndex={0}
-            // onKeyDown={handleKeyPress}
+            onKeyDown={handleKeyPress}
         >
             <div
                 className="relative flex items-center justify-center  "
@@ -43,6 +48,16 @@ export default function Canvas() {
                         <DrawShapes />
                         <DrawTexts />
                     </Layer>
+                    {currentElement.id !== null && (
+                        <Layer width={canvas?.size.w} height={canvas?.size.h}>
+                            <CurrentShape />
+                        </Layer>
+                    )}
+                    {externalCurrent.id !== null && (
+                        <Layer width={canvas?.size.w} height={canvas?.size.h}>
+                            <ExternalCurrentShape />
+                        </Layer>
+                    )}
                 </Stage>
             </div>
         </div>

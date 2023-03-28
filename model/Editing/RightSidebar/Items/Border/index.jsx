@@ -12,7 +12,7 @@ export default function Border() {
 
     return (
         <div className="flex flex-col space-y-4">
-            {currentElement?.value !== 'Circle' && (
+            {currentElement?.values?.type !== 'Ellipse' && (
                 <BorderRadius setborder={setborder} radius={border?.radius} />
             )}
             <BorderStyle setborder={setborder} width={border?.width} />

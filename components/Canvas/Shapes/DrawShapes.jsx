@@ -1,8 +1,11 @@
 import { useMemo } from 'react'
 
-import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
+import {
+    useCanvasContext,
+    useExternalCanvasContext,
+} from '@/store/context/providers/CanvasProvider'
 import { useElementContext } from '@/store/context/providers/ElementProvider'
-import { CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
+import { CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 import { ELEMENT_ACTIONS } from '@/store/reducer/elementReducer'
 
 import Rectangle from './Rectangle'
@@ -14,25 +17,20 @@ const SHAPES = {
 }
 
 export default function DrawShapes() {
-    const {
-        canvasItems,
-        canvasItemsDispatch,
-        setcurrentElement,
-        currentElement,
-    } = useCanvasContext()
-    const { elementDispatch } = useElementContext()
+    const { canvasItems, currentElementDispatch, currentElement } =
+        useCanvasContext()
+    const { externalCurrent } = useExternalCanvasContext()
 
-    function onChange(attr, id) {
-        canvasItemsDispatch({
-            type: CANVAS_ACTIONS.UPDATE,
-            values: { id: id, ...attr },
-        })
-    }
+    const { elementDispatch } = useElementContext()
 
     const shapes = useMemo(
         () =>
             canvasItems?.map((item) => {
-                if (item.main == 'Shapes') {
+                if (
+                    item.main === 'Shapes' &&
+                    item.id !== currentElement?.id &&
+                    item.id !== externalCurrent?.id
+                ) {
                     const Shape = SHAPES[item.type]
                     return (
                         <Shape
@@ -41,11 +39,15 @@ export default function DrawShapes() {
                             id={item.id}
                             events={{
                                 onClick: () => {
-                                    if (currentElement?.id !== item.id) {
-                                        setcurrentElement({
+                                    if (currentElement?.id == null) {
+                                        currentElementDispatch({
+                                            type: CURRENT_ACTIONS.CHANGE,
                                             id: item.id,
-                                            type: item.main,
-                                            value: item.type,
+                                            values: item,
+                                        })
+                                    } else {
+                                        currentElementDispatch({
+                                            type: CURRENT_ACTIONS.FORCE,
                                         })
                                     }
                                 },
@@ -53,55 +55,24 @@ export default function DrawShapes() {
                                     elementDispatch({
                                         type: ELEMENT_ACTIONS.RESET,
                                     })
-                                    setcurrentElement({
-                                        id: item.id,
-                                        type: item.main,
-                                        value: item.type,
-                                    })
-                                },
-                                onDragEnd(e) {
-                                    onChange(
-                                        {
-                                            x: parseInt(e.target.x()),
-                                            y: parseInt(e.target.y()),
-                                        },
-                                        item.id
-                                    )
-                                },
-                                onTransformStart() {
-                                    elementDispatch({
-                                        type: ELEMENT_ACTIONS.RESET,
-                                    })
-                                },
-                                onTransformEnd(e) {
-                                    const node = e.target
-                                    const scaleX = node.scaleX()
-                                    const scaleY = node.scaleY()
-
-                                    node.scaleX(1)
-                                    node.scaleY(1)
-                                    onChange(
-                                        {
-                                            x: parseInt(node.x()),
-                                            y: parseInt(node.y()),
-                                            width: Math.max(
-                                                5,
-                                                parseInt(node.width() * scaleX)
-                                            ),
-                                            height: Math.max(
-                                                5,
-                                                parseInt(node.height() * scaleY)
-                                            ),
-                                        },
-                                        item.id
-                                    )
+                                    if (currentElement?.id == null) {
+                                        currentElementDispatch({
+                                            type: CURRENT_ACTIONS.CHANGE,
+                                            id: item.id,
+                                            values: item,
+                                        })
+                                    } else {
+                                        currentElementDispatch({
+                                            type: CURRENT_ACTIONS.FORCE,
+                                        })
+                                    }
                                 },
                             }}
                         />
                     )
                 }
             }),
-        [canvasItems, currentElement]
+        [canvasItems, currentElement.id, externalCurrent.id]
     )
 
     return shapes

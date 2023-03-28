@@ -1,18 +1,15 @@
 import { useEffect, useState } from 'react'
 
 import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
-import { getCurrentElement } from '@/utils/helpers/canvas.helper'
-import { CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
+import { CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 
 export default function useSpacing() {
-    const { canvasItems, canvasItemsDispatch, currentElement } =
-        useCanvasContext()
+    const { currentElementDispatch, currentElement } = useCanvasContext()
 
     const [spacing, setspacing] = useState(() => {
-        const c = getCurrentElement(canvasItems, currentElement.id)
         return {
-            lineHeight: c?.lineHeight || 1,
-            letterSpacing: c?.letterSpacing || 0,
+            lineHeight: currentElement?.values?.lineHeight || 1,
+            letterSpacing: currentElement?.values?.letterSpacing || 0,
         }
     })
 
@@ -21,12 +18,10 @@ export default function useSpacing() {
     }, [spacing])
 
     function changeSpacing() {
-        const c = getCurrentElement(canvasItems, currentElement.id)
-        c !== null &&
-            canvasItemsDispatch({
-                type: CANVAS_ACTIONS.UPDATE,
+        currentElement.id !== null &&
+            currentElementDispatch({
+                type: CURRENT_ACTIONS.UPDATE,
                 values: {
-                    id: currentElement.id,
                     lineHeight: spacing.lineHeight,
                     letterSpacing: spacing.letterSpacing,
                     height:

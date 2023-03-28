@@ -1,35 +1,27 @@
 import { useEffect, useState } from 'react'
 
 import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
-import { CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
-import { getCurrentElement } from '@/utils/helpers/canvas.helper'
+import { CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 
 export function useBorder() {
-    const { canvasItems, canvasItemsDispatch, currentElement } =
-        useCanvasContext()
+    const { currentElement, currentElementDispatch } = useCanvasContext()
 
-    const [border, setborder] = useState(null)
+    const [border, setborder] = useState(() => {
+        return {
+            width: currentElement?.values?.strokeWidth || 0,
+            color: currentElement?.values?.stroke || '#000000',
+            radius: currentElement?.values?.cornerRadius || 0,
+        }
+    })
 
     useEffect(() => {
         border && changeBorder()
     }, [border])
 
-    useEffect(() => {
-        const c = getCurrentElement(canvasItems, currentElement.id)
-        if (c !== null) {
-            setborder({
-                width: c.strokeWidth,
-                color: c.stroke,
-                radius: c.cornerRadius,
-            })
-        }
-    }, [currentElement])
-
     function changeBorder() {
-        canvasItemsDispatch({
-            type: CANVAS_ACTIONS.UPDATE,
+        currentElementDispatch({
+            type: CURRENT_ACTIONS.UPDATE,
             values: {
-                id: currentElement.id,
                 stroke: border.color,
                 strokeWidth: parseInt(border.width),
                 cornerRadius: parseInt(border.radius),

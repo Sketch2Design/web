@@ -1,8 +1,8 @@
 import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
-import { CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
+import { CANVAS_ACTIONS, CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 
 export default function useKeyPress(ref) {
-    const { canvasItemsDispatch, currentElement, setcurrentElement } =
+    const { canvasItemsDispatch, currentElement, currentElementDispatch } =
         useCanvasContext()
 
     function handleKeyPress(e) {
@@ -10,7 +10,7 @@ export default function useKeyPress(ref) {
         const key = e.key
         if (key == 'Delete') {
             const [node] = ref.current.find(`#${currentElement.id}`)
-            setcurrentElement({ id: null, type: null, value: null })
+            currentElementDispatch({ type: CURRENT_ACTIONS.RESET })
             canvasItemsDispatch({
                 type: CANVAS_ACTIONS.DELETE,
                 values: { id: currentElement.id },
