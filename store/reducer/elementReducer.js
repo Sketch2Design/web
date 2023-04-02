@@ -1,36 +1,26 @@
-export const ACTIONS = {
+export const ELEMENT_ACTIONS = {
     UPDATE_ALL: 'update_all',
     UPDATE_VALUE: 'update_value',
     RESET: 'reset',
-    CURRENT: 'get_current',
 }
-
-
 
 export function elementReducer(state, action) {
     switch (action.type) {
-        case ACTIONS.UPDATE_ALL: {
-            return {
-                id: action.id,
-                main: action.main,
-                value: action.value
-            }
+        case ELEMENT_ACTIONS.UPDATE_ALL: {
+            return action.values
         }
-        case ACTIONS.UPDATE_VALUE: {
+        case ELEMENT_ACTIONS.UPDATE_VALUE: {
             return {
                 ...state,
-                value: action.value
+                type: action.values.type,
             }
         }
-        case ACTIONS.RESET: {
+        case ELEMENT_ACTIONS.RESET: {
             return {
                 id: null,
                 main: null,
-                value: null
+                type: null,
             }
-        }
-        case ACTIONS.CURRENT: {
-            return state
         }
     }
 }

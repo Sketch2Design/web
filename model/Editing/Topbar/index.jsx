@@ -1,4 +1,5 @@
 import { useElementContext } from '@/store/context/providers/ElementProvider'
+import { useExportContext } from '@/store/context/providers/CanvasProvider'
 
 import { TOPBAR_ITMES } from '@/utils/constants/editorInterface.constant'
 
@@ -11,9 +12,10 @@ import Multiple from './Items/Multiple'
 
 export default function Topbar() {
     const { element, elementDispatch } = useElementContext()
+    const { canvasRef } = useExportContext()
 
     return (
-        <div className="bg-zinc-800 h-20  rounded-xl flex justify-between items-center px-6">
+        <div className="flex h-20  items-center justify-between rounded-xl bg-zinc-800 px-6">
             <div className="flex space-x-8">
                 <Multiple
                     id={0}
@@ -41,7 +43,22 @@ export default function Topbar() {
             </div>
 
             <div className="flex">
-                <Button value="Export" />
+                <Button
+                    value="Export"
+                    onClick={() => {
+                        const dataURL = canvasRef.current.toDataURL({
+                            pixelRatio: 2,
+                            width: 720,
+                            height: 720,
+                        })
+                        let link = document.createElement('a')
+                        link.download = 'image.png'
+                        link.href = dataURL
+                        document.body.appendChild(link)
+                        link.click()
+                        document.body.removeChild(link)
+                    }}
+                />
             </div>
         </div>
     )

@@ -39,19 +39,23 @@
 
 @layer components {
     .edit_topbar_icon {
-        @apply w-7 h-7;
+        @apply h-7 w-7;
     }
 
     .edit_topbar_icon_mini {
-        @apply w-[26px] h-[26px];
+        @apply h-[26px] w-[26px];
+    }
+
+    .edit_topbar_icon_nano {
+        @apply h-[22px] w-[22px];
     }
 
     .edit_input_default {
-        @apply focus:bg-violet-600 bg-zinc-900 text-white h-10 px-2 rounded-md outline-none w-8/12;
+        @apply h-10 w-8/12 rounded-md bg-zinc-900 px-2 text-white outline-none focus:bg-violet-600;
     }
 
     .edit_sidebar_icon_wrapper {
-        @apply bg-zinc-900 h-10 px-2 flex justify-center items-center rounded-md cursor-pointer border-2 border-zinc-900 hover:border-violet-600;
+        @apply flex h-10 cursor-pointer items-center justify-center rounded-md border-2 border-zinc-900 bg-zinc-900 px-2 hover:border-violet-600;
     }
 }
 
@@ -65,4 +69,25 @@ input::-webkit-inner-spin-button {
 /* Works for Firefox */
 input[type='number'] {
     -moz-appearance: textfield;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+/* ::-webkit-scrollbar-track {
+} */
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #3f3f46;
+    border-radius: 40px;
+    margin: 50px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

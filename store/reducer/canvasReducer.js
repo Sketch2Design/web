@@ -1,71 +1,106 @@
-/**
- * @typedef {object} CANVAS_ACTIONS
- * @property {string} ADD
- * @property {string} DELETE
- * @property {string} UPDATE
- * @property {string} CURRENT
- */
+import { v4 as uuidv4 } from 'uuid'
 
 export const CANVAS_ACTIONS = {
     ADD: 'add_item',
+    ADD_ALL: 'add_all',
     DELETE: 'delete_item',
     UPDATE: 'update_item',
-    CURRENT: 'set_current'
 }
 
+export const CURRENT_ACTIONS = {
+    ADD: 'add_new_current_item',
+    CHANGE: 'change_current_item',
+    UPDATE: 'update_current_item',
+    DELETE: 'delete_current_item',
+    RESET: 'reset',
+    INITIAL: 'first_load',
+}
 
-/**
- * @typedef {object} item
- * @property {number} id
- * @property {string} main
- * @property {string} value
- * @property {number} sx
- * @property {number} sy
- * @property {number} ex
- * @property {number} sy
- * @property {number} w
- * @property {number} h
- */
-
-/**
- * @typedef {object} action
- * @property {CANVAS_ACTIONS} type
- * @property {item} values
- */
-
-/**
- * @param {item[]} state 
- * @param {action} action 
- * @returns 
- */
-
-export function canvasReducer(state, action){
+export function canvasReducer(state, action) {
     switch (action.type) {
-        case CANVAS_ACTIONS.ADD: {
-            return [
-                ...state,
-                { id: state?.id ? state?.id + 1 : 1, ...action.values}
-            ]
+        case CANVAS_ACTIONS.ADD_ALL: {
+            return action.values
         }
-        
+        case CANVAS_ACTIONS.ADD: {
+            return [...state, action.values]
+        }
+
         case CANVAS_ACTIONS.UPDATE: {
-            return state.map((item) => 
-                item.id == action.values.id && 
-                {...item, ...action.values}
+            return state.map((item) =>
+                item.id === action.values.id
+                    ? { ...item, ...action.values }
+                    : item
             )
         }
 
         case CANVAS_ACTIONS.DELETE: {
-            return state.map((item) => 
-                item.id == action.values.id && null
-            )
+            const filtered = state.filter((item) => item.id !== action.id)
+            return filtered
+        }
+    }
+}
+
+export function currentReducer(state, action) {
+    switch (action.type) {
+        case CURRENT_ACTIONS.ADD: {
+            const id = action.id || uuidv4()
+            return {
+                id: id,
+                values: { id: id, ...action.values },
+                update: false,
+                initial: false,
+                delete: false,
+                add: true,
+            }
         }
 
-        case CANVAS_ACTIONS.CURRENT: {
-            
-            return state.map((item) => 
-                item.id == action.values.id && null
-            )
+        case CURRENT_ACTIONS.CHANGE: {
+            return {
+                id: action.id,
+                values: action.values,
+                update: false,
+                add: false,
+                delete: false,
+                initial: false,
+            }
+        }
+
+        case CURRENT_ACTIONS.UPDATE: {
+            return {
+                ...state,
+                values: { ...state.values, ...action.values },
+                update: true,
+                add: false,
+            }
+        }
+
+        case CURRENT_ACTIONS.DELETE: {
+            return {
+                ...state,
+                delete: true,
+            }
+        }
+
+        case CURRENT_ACTIONS.RESET: {
+            return {
+                id: null,
+                values: null,
+                update: false,
+                add: false,
+                delete: false,
+                initial: false,
+            }
+        }
+
+        case CURRENT_ACTIONS.INITIAL: {
+            return {
+                id: null,
+                values: null,
+                update: false,
+                add: false,
+                delete: false,
+                initial: true,
+            }
         }
     }
 }

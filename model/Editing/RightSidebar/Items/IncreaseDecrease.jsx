@@ -16,13 +16,14 @@ export default function IncreaseDecrease({ name }) {
 
     return (
         <div className="flex justify-between items-center ">
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-2">
                 <span
                     className="edit_sidebar_icon_wrapper"
-                    onClick={() => handleChange('a')}
+                    onClick={() => handleChange('s')}
                 >
-                    <AiOutlinePlus className="w-4 h-4 text-white" />
+                    <AiOutlineMinus className="w-4 h-4 text-white" />
                 </span>
+
                 <input
                     name={name}
                     type="number"
@@ -31,12 +32,11 @@ export default function IncreaseDecrease({ name }) {
                     defaultValue={16}
                     ref={ref}
                 />
-
                 <span
                     className="edit_sidebar_icon_wrapper"
-                    onClick={() => handleChange('s')}
+                    onClick={() => handleChange('a')}
                 >
-                    <AiOutlineMinus className="w-4 h-4 text-white" />
+                    <AiOutlinePlus className="w-4 h-4 text-white" />
                 </span>
             </div>
         </div>
