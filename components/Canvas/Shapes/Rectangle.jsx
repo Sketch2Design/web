@@ -12,23 +12,38 @@ import Hover from '../Transform/Hover'
 export default function Rectangle({ shapeProps, id, events }) {
     const shape = useRef(null)
 
-    const [hover, sethover] = useState({ isHover: false, values: {} })
+    const [hover, sethover] = useState(false)
 
     const { currentElement } = useCanvasContext()
     const { externalCurrent } = useExternalCanvasContext()
 
     return (
         <>
-            {currentElement.id !== id && <Hover hover={hover} />}
+            {currentElement.id !== id && (
+                <Hover
+                    hover={{
+                        isHover: hover,
+                        values: {
+                            x: shapeProps.x - 1,
+                            y: shapeProps.y - 1,
+                            width: shapeProps.width + 2,
+                            height: shapeProps.height + 2,
+                            strokeWidth: shapeProps.strokeWidth,
+                            stroke: '#A341FE',
+                        },
+                    }}
+                />
+            )}
             {externalCurrent.id === id && (
                 <Hover
                     hover={{
                         isHover: true,
                         values: {
-                            x: shapeProps.x,
-                            y: shapeProps.y,
-                            width: shapeProps.width,
-                            height: shapeProps.height,
+                            x: shapeProps.x - 1,
+                            y: shapeProps.y - 1,
+                            width: shapeProps.width + 2,
+                            height: shapeProps.height + 2,
+                            strokeWidth: shapeProps.strokeWidth,
                             stroke: '#B60000',
                         },
                     }}
@@ -38,18 +53,17 @@ export default function Rectangle({ shapeProps, id, events }) {
                 ref={shape}
                 {...shapeProps}
                 {...events}
-                onMouseEnter={(e) => {
-                    const el = e.target
-                    sethover({ isHover: true, values: el.getClientRect() })
+                onMouseEnter={() => {
+                    sethover(true)
+                    // el.getClientRect()
                 }}
                 onMouseLeave={() => {
-                    sethover({ isHover: false, values: {} })
+                    sethover(false)
                 }}
                 draggable={true}
-                // draggable={currentElement.id === id ? true : false}
             />
 
-            {currentElement.id === id && (
+            {currentElement.id === id && !currentElement.delete && (
                 <Transform ref={shape} isSelected={true} />
             )}
         </>

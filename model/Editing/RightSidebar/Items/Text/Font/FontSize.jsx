@@ -18,17 +18,11 @@ function FontSize({ size, setfont }) {
                 w="w-12"
                 h="h-7"
                 onChange={() => {
-                    const val =
-                        inputRef.current.value === ''
-                            ? 6
-                            : inputRef.current.value
+                    const val = inputRef.current.value
                     setfont((prev) => ({
                         ...prev,
                         fontSize: parseInt(val),
                     }))
-
-                    if (inputRef.current.value === '')
-                        inputRef.current.value = 6
                 }}
             />
         </div>

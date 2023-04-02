@@ -1,10 +1,14 @@
+import { useRef } from 'react'
+
 import EditableInput from '@/components/Input/EditableInput'
 import useSpacing from '@/utils/hooks/Editing/Text/useSpacing'
-import { useRef } from 'react'
 
 import { CgFontHeight, CgFontSpacing } from 'react-icons/cg'
 
 export default function Spacing() {
+    const inputRef1 = useRef()
+    const inputRef2 = useRef()
+
     const [spacing, setspacing] = useSpacing()
 
     return (
@@ -13,18 +17,17 @@ export default function Spacing() {
                 <CgFontHeight className="h-8 w-8" />
 
                 <EditableInput
+                    ref={inputRef1}
                     defaultValue={spacing.lineHeight}
                     type="number"
                     w="w-12"
                     h="h-7"
-                    onChange={(e) => {
-                        const val = e.target.value === '' ? 1 : e.target.value
+                    onChange={() => {
+                        const val = inputRef1.current.value
                         setspacing((prev) => ({
                             ...prev,
                             lineHeight: parseFloat(val),
                         }))
-
-                        if (e.target.value === '') e.target.value = 1
                     }}
                 />
             </div>
@@ -32,18 +35,17 @@ export default function Spacing() {
                 <CgFontSpacing className="h-8 w-8" />
 
                 <EditableInput
+                    ref={inputRef2}
                     defaultValue={spacing.letterSpacing}
                     type="number"
                     w="w-12"
                     h="h-7"
                     onChange={(e) => {
-                        const val = e.target.value
+                        const val = inputRef2.current.value
                         setspacing((prev) => ({
                             ...prev,
                             letterSpacing: parseFloat(val),
                         }))
-
-                        if (e.target.value === '') e.target.value = 0
                     }}
                 />
             </div>

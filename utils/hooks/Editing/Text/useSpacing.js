@@ -18,7 +18,8 @@ export default function useSpacing() {
     }, [spacing])
 
     function changeSpacing() {
-        currentElement.id !== null &&
+        if (currentElement.id !== null) {
+            const c = currentElement?.values
             currentElementDispatch({
                 type: CURRENT_ACTIONS.UPDATE,
                 values: {
@@ -29,6 +30,7 @@ export default function useSpacing() {
                         spacing.lineHeight,
                 },
             })
+        }
     }
 
     return [spacing, setspacing]

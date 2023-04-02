@@ -21,9 +21,8 @@ function BorderRadius({ radius, setborder }) {
                     const val = inputRef.current.value
                     setborder((prev) => ({
                         ...prev,
-                        radius: val === '' ? 0 : parseInt(val),
+                        radius: val,
                     }))
-                    val === '' && (inputRef.current.value = 0)
                 }}
             />
         </div>

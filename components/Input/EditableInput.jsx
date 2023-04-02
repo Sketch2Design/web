@@ -15,7 +15,11 @@ const EditableInput = forwardRef(function EditableInput(
             maxLength={6}
             value={defaultValue ?? ''}
             onFocus={(e) => e.target.select()}
-            onChange={(e) => onChange(e)}
+            onChange={(e) => {
+                const value = e.target.value
+                if (value === '' || value < 0) ref.current.value = 0
+                onChange()
+            }}
         />
     )
 })

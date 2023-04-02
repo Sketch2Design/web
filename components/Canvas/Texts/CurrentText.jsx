@@ -4,16 +4,11 @@ import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
 import { useElementContext } from '@/store/context/providers/ElementProvider'
 import { CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 import { ELEMENT_ACTIONS } from '@/store/reducer/elementReducer'
+import { findTextScale } from '@/utils/helpers/canvas.helper'
 
-import Rectangle from './Rectangle'
-import Ellipse from './Ellipse'
+import Text from './Text'
 
-const SHAPES = {
-    Rectangle: Rectangle,
-    Ellipse: Ellipse,
-}
-
-export default function CurrentShape() {
+export default function CurrentText() {
     const { currentElementDispatch, currentElement } = useCanvasContext()
     const { elementDispatch } = useElementContext()
 
@@ -24,14 +19,13 @@ export default function CurrentShape() {
         })
     }
 
-    const shape = useMemo(() => {
+    const text = useMemo(() => {
         const item = currentElement.values
-        if (item.main === 'Shapes') {
-            const Shape = SHAPES[item?.type]
+        if (item.main === 'Text') {
             return (
-                <Shape
+                <Text
                     key={item.id}
-                    shapeProps={item}
+                    textProps={item}
                     id={item.id}
                     events={{
                         onDragEnd(e) {
@@ -45,24 +39,33 @@ export default function CurrentShape() {
                                 type: ELEMENT_ACTIONS.RESET,
                             })
                         },
-                        onTransformEnd(e) {
+                        onTransform(e) {
                             const node = e.target
+
                             const scaleX = node.scaleX()
-                            const scaleY = node.scaleY()
 
                             node.scaleX(1)
                             node.scaleY(1)
+
+                            // console.log(node.getTextWidth(), width)
                             onChange({
                                 x: parseInt(node.x()),
                                 y: parseInt(node.y()),
-                                width: Math.max(
-                                    5,
-                                    parseInt(node.width() * scaleX)
-                                ),
-                                height: Math.max(
-                                    5,
-                                    parseInt(node.height() * scaleY)
-                                ),
+                                width: Math.max(node.width() * scaleX, 24),
+                            })
+                        },
+                        onTransformEnd(e) {
+                            const node = e.target
+
+                            const { width, height, fontSize } =
+                                findTextScale(node)
+
+                            onChange({
+                                x: parseInt(node.x()),
+                                y: parseInt(node.y()),
+                                width: width,
+                                height: height,
+                                fontSize: fontSize,
                             })
                         },
                     }}
@@ -71,5 +74,5 @@ export default function CurrentShape() {
         }
     }, [currentElement])
 
-    return shape
+    return text
 }

@@ -2,9 +2,10 @@ import Items from './Items'
 import LayoutHorizontalAlignment from './Items/Alignment/LayoutHorizontalAlignment'
 import LayoutVerticalAlignment from './Items/Alignment/LayoutVerticalAlignment'
 import TextFill from './Items/Fill/TextFill'
-import Font from './Items/Font'
-import Spacing from './Items/Font/Spacing'
-import TextContent from './Items/Font/Text/TextContent'
+import Font from './Items/Text/Font'
+import Format from './Items/Text/Format'
+import Spacing from './Items/Text/Spacing'
+import TextContent from './Items/Text/Content/TextContent'
 
 export default function TextSidebar() {
     return (
@@ -20,6 +21,9 @@ export default function TextSidebar() {
                 </Items.Group>
                 <Items.Group>
                     <Font />
+                </Items.Group>
+                <Items.Group>
+                    <Format />
                 </Items.Group>
                 <Items.Group>
                     <TextFill />

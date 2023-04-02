@@ -27,12 +27,12 @@ const Transform = forwardRef(function Transform({ shape, isSelected }, ref) {
                 //     :
                 shape == 'Text'
                     ? [
-                          'top-left',
-                          'top-right',
+                          //   'top-left',
+                          //   'top-right',
                           'middle-left',
                           'middle-right',
-                          'bottom-left',
-                          'bottom-right',
+                          //   'bottom-left',
+                          //   'bottom-right',
                       ]
                     : [
                           'top-left',

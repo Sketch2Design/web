@@ -48,7 +48,6 @@ export default function useChanges(ref) {
             })
             const [node] = ref.current.find(`#${currentElement.id}`)
             node.destroy()
-            currentElementDispatch({ type: CURRENT_ACTIONS.RESET })
         }
     }, [currentElement.delete])
 

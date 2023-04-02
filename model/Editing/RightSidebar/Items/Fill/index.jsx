@@ -18,7 +18,10 @@ export default function Fill({
             <EditableInput
                 defaultValue={color?.slice(1)?.toUpperCase()}
                 ref={inputRef}
-                onChange={(c) => handleColorChange(`#${c.toUpperCase()}`)}
+                onChange={() => {
+                    const val = inputRef.current.value
+                    handleColorChange(`#${val.toUpperCase()}`)
+                }}
             />
         </div>
     )

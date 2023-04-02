@@ -15,7 +15,8 @@ export default function useText() {
     }, [text])
 
     function changeText() {
-        currentElement.id !== null &&
+        if (currentElement.id !== null) {
+            const c = currentElement?.values
             currentElementDispatch({
                 type: CURRENT_ACTIONS.UPDATE,
                 values: {
@@ -25,6 +26,7 @@ export default function useText() {
                         c.lineHeight,
                 },
             })
+        }
     }
 
     return [text, settext]

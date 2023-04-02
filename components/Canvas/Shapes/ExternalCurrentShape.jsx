@@ -15,14 +15,16 @@ export default function ExternalCurrentShape() {
 
     const shape = useMemo(() => {
         const item = externalCurrent.values
-        const Shape = SHAPES[item?.type]
-        return (
-            <Shape
-                key={item.id}
-                shapeProps={{ ...item, listening: false }}
-                id={item.id}
-            />
-        )
+        if (item.main === 'Shapes') {
+            const Shape = SHAPES[item?.type]
+            return (
+                <Shape
+                    key={item.id}
+                    shapeProps={{ ...item, listening: false }}
+                    id={item.id}
+                />
+            )
+        }
     }, [externalCurrent])
 
     return shape

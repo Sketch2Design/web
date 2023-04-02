@@ -10,7 +10,7 @@ import { CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 import { BROADCAST_EVENTS } from '@/utils/constants/editorInterface.constant'
 
 export default function useSubscribe() {
-    const { currentElement } = useCanvasContext()
+    const { currentElement, currentElementDispatch } = useCanvasContext()
 
     const { externalCurrentDispatch } = useExternalCanvasContext()
 
@@ -109,6 +109,7 @@ export default function useSubscribe() {
         async function deleteNode(channel) {
             const user = router.query?.user
             console.log('send deleted node')
+            currentElementDispatch({ type: CURRENT_ACTIONS.RESET })
             await channel.send({
                 type: 'broadcast',
                 event: BROADCAST_EVENTS.DELETE_NODE,
@@ -132,7 +133,7 @@ export default function useSubscribe() {
         return () => {
             supabase.removeChannel(channel)
         }
-    }, [currentElement.id])
+    }, [currentElement.id, currentElement.delete])
 
     // current element values change
     useEffect(() => {

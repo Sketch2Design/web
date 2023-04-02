@@ -31,7 +31,6 @@ export default function DrawShapes() {
                     item.id !== currentElement?.id &&
                     item.id !== externalCurrent?.id
                 ) {
-                    console.log('check reset ', item)
                     const Shape = SHAPES[item.type]
                     return (
                         <Shape

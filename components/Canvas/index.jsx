@@ -15,6 +15,8 @@ import DrawShapes from './Shapes/DrawShapes'
 import DrawTexts from './Texts/DrawTexts'
 import CurrentShape from './Shapes/CurrentShape'
 import ExternalCurrentShape from './Shapes/ExternalCurrentShape'
+import ExternalCurrentText from './Texts/ExternalCurrentText'
+import CurrentText from './Texts/CurrentText'
 
 export default function Canvas() {
     const { canvas, canvasRef } = useExportContext()
@@ -53,11 +55,13 @@ export default function Canvas() {
                     {currentElement.id !== null && !currentElement.initial && (
                         <Layer width={canvas?.size.w} height={canvas?.size.h}>
                             <CurrentShape />
+                            <CurrentText />
                         </Layer>
                     )}
                     {externalCurrent.id !== null && (
                         <Layer width={canvas?.size.w} height={canvas?.size.h}>
                             <ExternalCurrentShape />
+                            <ExternalCurrentText />
                         </Layer>
                     )}
                 </Stage>
