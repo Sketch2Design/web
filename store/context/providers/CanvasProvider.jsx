@@ -25,15 +25,15 @@ export default function CanvasProvider({ children }) {
 
     const [externalCurrent, externalCurrentDispatch] = useReducer(
         currentReducer,
-        { id: null, values: null, update: false }
+        { id: null, values: null, update: false, add: false, delete: false }
     )
 
     // canvas items
     const [canvasItems, canvasItemsDispatch] = useReducer(canvasReducer, [])
-    currentReducer
+
     const [currentElement, currentElementDispatch] = useReducer(
         currentReducer,
-        { id: null, values: null, update: false }
+        { id: null, values: null, add: false, update: false, delete: false }
     )
 
     //export

@@ -152,7 +152,9 @@ export const FONT_FORMAT_ITEMS = [
 // ------------------------------------------------------------broadcase -------------------------------------------------------------
 
 export const BROADCAST_EVENTS = {
-    CURRENT_NODE: 'current_node_id',
+    CHANGE_NODE: 'current_node_id',
     RESET_NODE: 'reset_node',
     UPDATE_NODE: 'update_node',
+    ADD_NODE: 'add_node',
+    DELETE_NODE: 'delete_node',
 }

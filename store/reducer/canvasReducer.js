@@ -8,10 +8,12 @@ export const CANVAS_ACTIONS = {
 }
 
 export const CURRENT_ACTIONS = {
+    ADD: 'add_new_current_item',
     CHANGE: 'change_current_item',
-    UPDATE: 'update_values',
-    FORCE: 'force_update_canvas_values',
+    UPDATE: 'update_current_item',
+    DELETE: 'delete_current_item',
     RESET: 'reset',
+    INITIAL: 'first_load',
 }
 
 export function canvasReducer(state, action) {
@@ -20,13 +22,7 @@ export function canvasReducer(state, action) {
             return action.values
         }
         case CANVAS_ACTIONS.ADD: {
-            const id = uuidv4()
-            action.current({
-                type: CURRENT_ACTIONS.CHANGE,
-                id: id,
-                values: action.values,
-            })
-            return [...state, { id: id, ...action.values }]
+            return [...state, action.values]
         }
 
         case CANVAS_ACTIONS.UPDATE: {
@@ -38,9 +34,7 @@ export function canvasReducer(state, action) {
         }
 
         case CANVAS_ACTIONS.DELETE: {
-            const filtered = state.filter(
-                (item) => item.id !== action.values.id
-            )
+            const filtered = state.filter((item) => item.id !== action.id)
             return filtered
         }
     }
@@ -48,20 +42,65 @@ export function canvasReducer(state, action) {
 
 export function currentReducer(state, action) {
     switch (action.type) {
+        case CURRENT_ACTIONS.ADD: {
+            const id = action.id || uuidv4()
+            return {
+                id: id,
+                values: { id: id, ...action.values },
+                update: false,
+                initial: false,
+                delete: false,
+                add: true,
+            }
+        }
+
         case CURRENT_ACTIONS.CHANGE: {
-            return { id: action.id, values: action.values, update: false }
+            return {
+                id: action.id,
+                values: action.values,
+                update: false,
+                add: false,
+                delete: false,
+                initial: false,
+            }
         }
 
         case CURRENT_ACTIONS.UPDATE: {
-            return { ...state, values: { ...state.values, ...action.values } }
+            return {
+                ...state,
+                values: { ...state.values, ...action.values },
+                update: true,
+                add: false,
+            }
         }
 
-        case CURRENT_ACTIONS.FORCE: {
-            return { ...state, update: true }
+        case CURRENT_ACTIONS.DELETE: {
+            return {
+                ...state,
+                delete: true,
+            }
         }
 
         case CURRENT_ACTIONS.RESET: {
-            return { id: null, values: null, update: false }
+            return {
+                id: null,
+                values: null,
+                update: false,
+                add: false,
+                delete: false,
+                initial: false,
+            }
+        }
+
+        case CURRENT_ACTIONS.INITIAL: {
+            return {
+                id: null,
+                values: null,
+                update: false,
+                add: false,
+                delete: false,
+                initial: true,
+            }
         }
     }
 }

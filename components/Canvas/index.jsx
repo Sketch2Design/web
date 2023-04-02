@@ -7,8 +7,9 @@ import {
 } from '@/store/context/providers/CanvasProvider'
 import useDrawNode from '@/utils/hooks/Editing/useDrawNode'
 import useKeyPress from '@/utils/hooks/Editing/useKeyPress'
-import useDesign from '@/utils/hooks/Editing/useDesign'
-import useSubscribe from '@/utils/hooks/supabase/useSubscribe'
+import useDesign from '@/utils/hooks/design/useDesign'
+import useSubscribe from '@/utils/hooks/design/useSubscribe'
+import useChanges from '@/utils/hooks/design/useChanges'
 
 import DrawShapes from './Shapes/DrawShapes'
 import DrawTexts from './Texts/DrawTexts'
@@ -24,6 +25,7 @@ export default function Canvas() {
     const handleKeyPress = useKeyPress(canvasRef)
     useDesign()
     useSubscribe()
+    useChanges(canvasRef)
 
     return (
         <div
@@ -48,7 +50,7 @@ export default function Canvas() {
                         <DrawShapes />
                         <DrawTexts />
                     </Layer>
-                    {currentElement.id !== null && (
+                    {currentElement.id !== null && !currentElement.initial && (
                         <Layer width={canvas?.size.w} height={canvas?.size.h}>
                             <CurrentShape />
                         </Layer>

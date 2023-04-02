@@ -10,8 +10,8 @@ export default function Hover({ hover }) {
                     x={hover.values.x}
                     y={hover.values.y}
                     fill="transparent"
-                    stroke="#810096"
-                    strokeWidth={1}
+                    stroke={hover.values?.stroke || '#810096'}
+                    strokeWidth={3}
                 />
             ) : (
                 <></>

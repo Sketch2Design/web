@@ -7,12 +7,11 @@ import {
 import { useElementContext } from '@/store/context/providers/ElementProvider'
 import { ELEMENT_ACTIONS } from '@/store/reducer/elementReducer'
 
-import { CANVAS_ACTIONS, CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
+import { CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 
 export default function useDrawNode(ref) {
     const { canvas } = useExportContext()
-    const { canvasItemsDispatch, currentElementDispatch, currentElement } =
-        useCanvasContext()
+    const { currentElementDispatch, currentElement } = useCanvasContext()
     const { element, elementDispatch } = useElementContext()
 
     useEffect(() => {
@@ -40,9 +39,9 @@ export default function useDrawNode(ref) {
                 values.verticalAlign = 'middle'
                 values.wrap = 'none'
             }
-            canvasItemsDispatch({
-                current: currentElementDispatch,
-                type: CANVAS_ACTIONS.ADD,
+            currentElementDispatch({
+                type: CURRENT_ACTIONS.ADD,
+                id: null,
                 values: values,
             })
         }
@@ -54,7 +53,7 @@ export default function useDrawNode(ref) {
             ref.current.mouseClickEndShape == null &&
             currentElement.id !== null
         ) {
-            currentElementDispatch({ type: CURRENT_ACTIONS.FORCE })
+            currentElementDispatch({ type: CURRENT_ACTIONS.RESET })
         }
     }
 

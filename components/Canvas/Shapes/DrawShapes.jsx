@@ -31,6 +31,7 @@ export default function DrawShapes() {
                     item.id !== currentElement?.id &&
                     item.id !== externalCurrent?.id
                 ) {
+                    console.log('check reset ', item)
                     const Shape = SHAPES[item.type]
                     return (
                         <Shape
@@ -39,40 +40,28 @@ export default function DrawShapes() {
                             id={item.id}
                             events={{
                                 onClick: () => {
-                                    if (currentElement?.id == null) {
-                                        currentElementDispatch({
-                                            type: CURRENT_ACTIONS.CHANGE,
-                                            id: item.id,
-                                            values: item,
-                                        })
-                                    } else {
-                                        currentElementDispatch({
-                                            type: CURRENT_ACTIONS.FORCE,
-                                        })
-                                    }
+                                    currentElementDispatch({
+                                        type: CURRENT_ACTIONS.CHANGE,
+                                        id: item.id,
+                                        values: item,
+                                    })
                                 },
                                 onDragStart: () => {
                                     elementDispatch({
                                         type: ELEMENT_ACTIONS.RESET,
                                     })
-                                    if (currentElement?.id == null) {
-                                        currentElementDispatch({
-                                            type: CURRENT_ACTIONS.CHANGE,
-                                            id: item.id,
-                                            values: item,
-                                        })
-                                    } else {
-                                        currentElementDispatch({
-                                            type: CURRENT_ACTIONS.FORCE,
-                                        })
-                                    }
+                                    currentElementDispatch({
+                                        type: CURRENT_ACTIONS.CHANGE,
+                                        id: item.id,
+                                        values: item,
+                                    })
                                 },
                             }}
                         />
                     )
                 }
             }),
-        [canvasItems, currentElement.id, externalCurrent.id]
+        [currentElement.id, externalCurrent.id, currentElement.initial]
     )
 
     return shapes

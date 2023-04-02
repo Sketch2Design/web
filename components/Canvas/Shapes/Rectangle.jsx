@@ -1,7 +1,10 @@
 import { useRef, useState } from 'react'
 import { Rect } from 'react-konva'
 
-import { useCanvasContext } from '@/store/context/providers/CanvasProvider'
+import {
+    useCanvasContext,
+    useExternalCanvasContext,
+} from '@/store/context/providers/CanvasProvider'
 
 import Transform from '../Transform'
 import Hover from '../Transform/Hover'
@@ -12,10 +15,25 @@ export default function Rectangle({ shapeProps, id, events }) {
     const [hover, sethover] = useState({ isHover: false, values: {} })
 
     const { currentElement } = useCanvasContext()
+    const { externalCurrent } = useExternalCanvasContext()
 
     return (
         <>
             {currentElement.id !== id && <Hover hover={hover} />}
+            {externalCurrent.id === id && (
+                <Hover
+                    hover={{
+                        isHover: true,
+                        values: {
+                            x: shapeProps.x,
+                            y: shapeProps.y,
+                            width: shapeProps.width,
+                            height: shapeProps.height,
+                            stroke: '#B60000',
+                        },
+                    }}
+                />
+            )}
             <Rect
                 ref={shape}
                 {...shapeProps}
@@ -27,7 +45,8 @@ export default function Rectangle({ shapeProps, id, events }) {
                 onMouseLeave={() => {
                     sethover({ isHover: false, values: {} })
                 }}
-                draggable={currentElement.id === id ? true : false}
+                draggable={true}
+                // draggable={currentElement.id === id ? true : false}
             />
 
             {currentElement.id === id && (

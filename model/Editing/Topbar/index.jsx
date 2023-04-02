@@ -12,7 +12,7 @@ import Multiple from './Items/Multiple'
 
 export default function Topbar() {
     const { element, elementDispatch } = useElementContext()
-    const { canvas, canvasRef } = useExportContext()
+    const { canvasRef } = useExportContext()
 
     return (
         <div className="flex h-20  items-center justify-between rounded-xl bg-zinc-800 px-6">

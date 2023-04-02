@@ -6,47 +6,20 @@ import {
     useCanvasContext,
     useExternalCanvasContext,
 } from '@/store/context/providers/CanvasProvider'
-import { CURRENT_ACTIONS, CANVAS_ACTIONS } from '@/store/reducer/canvasReducer'
+import { CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 import { BROADCAST_EVENTS } from '@/utils/constants/editorInterface.constant'
 
 export default function useSubscribe() {
-    const { currentElement, currentElementDispatch, canvasItemsDispatch } =
-        useCanvasContext()
+    const { currentElement } = useCanvasContext()
 
-    const { externalCurrent, externalCurrentDispatch } =
-        useExternalCanvasContext()
+    const { externalCurrentDispatch } = useExternalCanvasContext()
 
     const router = useRouter()
 
-    // change canvas items only after the current element changes to null or new element
-    useEffect(() => {
-        if (currentElement.update) {
-            canvasItemsDispatch({
-                type: CANVAS_ACTIONS.UPDATE,
-                values: currentElement.values,
-            })
-            currentElementDispatch({
-                type: CURRENT_ACTIONS.RESET,
-            })
-        }
-    }, [currentElement.update])
-
-    useEffect(() => {
-        if (externalCurrent.update && externalCurrent.id !== null) {
-            canvasItemsDispatch({
-                type: CANVAS_ACTIONS.UPDATE,
-                values: externalCurrent.values,
-            })
-            externalCurrentDispatch({
-                type: CURRENT_ACTIONS.RESET,
-            })
-        }
-    }, [externalCurrent.update])
-
-    // ------------------------------------------------------------ send current node via broadcast -----------------------------------------------------------
+    // ------------------------------------------------------------ send current detials node via broadcast -----------------------------------------------------------
     useEffect(() => {
         const id = router.query.designId
-        const channel = supabase.channel(id + 'change', {
+        const channel = supabase.channel(id + ':change', {
             config: {
                 broadcast: {
                     ack: true,
@@ -56,8 +29,9 @@ export default function useSubscribe() {
 
         channel.on(
             'broadcast',
-            { event: BROADCAST_EVENTS.CURRENT_NODE },
+            { event: BROADCAST_EVENTS.CHANGE_NODE },
             (payload) => {
+                console.log('node change recieved')
                 externalCurrentDispatch({
                     type: CURRENT_ACTIONS.CHANGE,
                     id: payload?.payload?.id,
@@ -65,24 +39,51 @@ export default function useSubscribe() {
                 })
             }
         )
+        channel.on(
+            'broadcast',
+            { event: BROADCAST_EVENTS.ADD_NODE },
+            (payload) => {
+                console.log('add new node recieved')
+                externalCurrentDispatch({
+                    type: CURRENT_ACTIONS.ADD,
+                    id: payload?.payload?.id,
+                    values: payload?.payload?.values,
+                })
+            }
+        )
+        channel.on(
+            'broadcast',
+            { event: BROADCAST_EVENTS.DELETE_NODE },
+            (payload) => {
+                console.log('delete node recieved')
+                externalCurrentDispatch({
+                    type: CURRENT_ACTIONS.DELETE,
+                })
+            }
+        )
         channel.on('broadcast', { event: BROADCAST_EVENTS.RESET_NODE }, () => {
-            console.log('reset')
-            externalCurrentDispatch({ type: CURRENT_ACTIONS.FORCE })
+            console.log('reset node recieved')
+            externalCurrentDispatch({ type: CURRENT_ACTIONS.RESET })
         })
 
         channel.subscribe(async (status) => {
             if (status === 'SUBSCRIBED') {
-                console.log('current change')
-                if (currentElement.id !== null) sendCurrentNode(channel)
+                if (currentElement.id !== null && currentElement.add)
+                    addNewNode(channel)
+                else if (currentElement.id !== null && currentElement.delete)
+                    deleteNode(channel)
+                else if (currentElement.id !== null && !currentElement.initial)
+                    sendCurrentNode(channel)
                 else if (currentElement.id === null) resetNode(channel)
             }
         })
 
         async function sendCurrentNode(channel) {
             const user = router.query?.user
+            console.log('send current node')
             await channel.send({
                 type: 'broadcast',
-                event: BROADCAST_EVENTS.CURRENT_NODE,
+                event: BROADCAST_EVENTS.CHANGE_NODE,
                 payload: {
                     user: user,
                     id: currentElement.id,
@@ -91,7 +92,34 @@ export default function useSubscribe() {
             })
         }
 
+        async function addNewNode(channel) {
+            const user = router.query?.user
+            console.log('send newly added node')
+            await channel.send({
+                type: 'broadcast',
+                event: BROADCAST_EVENTS.ADD_NODE,
+                payload: {
+                    user: user,
+                    id: currentElement.id,
+                    values: currentElement.values,
+                },
+            })
+        }
+
+        async function deleteNode(channel) {
+            const user = router.query?.user
+            console.log('send deleted node')
+            await channel.send({
+                type: 'broadcast',
+                event: BROADCAST_EVENTS.DELETE_NODE,
+                payload: {
+                    user: user,
+                },
+            })
+        }
+
         async function resetNode(channel) {
+            console.log('send reset node')
             await channel.send({
                 type: 'broadcast',
                 event: BROADCAST_EVENTS.RESET_NODE,
@@ -106,7 +134,7 @@ export default function useSubscribe() {
         }
     }, [currentElement.id])
 
-    // canvas items changes
+    // current element values change
     useEffect(() => {
         const id = router.query.designId
         const channel = supabase.channel(id + ':update', {
@@ -121,7 +149,7 @@ export default function useSubscribe() {
             'broadcast',
             { event: BROADCAST_EVENTS.UPDATE_NODE },
             (payload) => {
-                console.log('run dispatch')
+                console.log('external element change recieved')
                 const values = payload.payload.values
                 externalCurrentDispatch({
                     type: CURRENT_ACTIONS.UPDATE,
@@ -132,7 +160,8 @@ export default function useSubscribe() {
 
         channel.subscribe(async (status) => {
             const user = router.query?.user
-            if (status === 'SUBSCRIBED') {
+            if (status === 'SUBSCRIBED' && currentElement.values !== null) {
+                console.log('external element changes send')
                 await channel.send({
                     type: 'broadcast',
                     event: BROADCAST_EVENTS.UPDATE_NODE,

@@ -8,7 +8,8 @@ import { CANVAS_ACTIONS, CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 let fetch = true
 
 export default function useDesign() {
-    const { canvasItems, canvasItemsDispatch } = useCanvasContext()
+    const { canvasItems, canvasItemsDispatch, currentElementDispatch } =
+        useCanvasContext()
 
     const router = useRouter()
 
@@ -25,10 +26,16 @@ export default function useDesign() {
             .from('design')
             .select('canvas_items')
             .eq('id', router.query.designId)
-        canvasItemsDispatch({
-            type: CANVAS_ACTIONS.ADD_ALL,
-            values: data[0].canvas_items.items,
-        })
+        if (!error && data[0].canvas_items.items.length > 0) {
+            const values = data[0].canvas_items.items
+            canvasItemsDispatch({
+                type: CANVAS_ACTIONS.ADD_ALL,
+                values: values,
+            })
+            currentElementDispatch({
+                type: CURRENT_ACTIONS.INITIAL,
+            })
+        }
     }
 
     // -------------------------------------------------------------- update changes to database --------------------------------------------------------
@@ -38,7 +45,6 @@ export default function useDesign() {
         canvasItems.length !== 0 && updateCanvasItems(ac.signal)
 
         async function updateCanvasItems(signal) {
-            console.log(canvasItems)
             const { data, error } = await supabase
                 .from('design')
                 .update({ canvas_items: { items: canvasItems } })
@@ -49,7 +55,5 @@ export default function useDesign() {
         return () => {
             ac.abort()
         }
-
-        //canvasItems?.filter((item) => item.id == currentElement?.id)
     }, [canvasItems])
 }
