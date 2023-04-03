@@ -28,18 +28,18 @@ export default function AdminSidebar() {
     }, [])
 
     return (
-        <div className="bg-zinc-800 h-screen fixed w-96 rounded-tr-full rounded-br-xl flex flex-col space-y-20 items-center z-50 py-10">
-            <p className="font-bold text-4xl flex justify-center">Sketch</p>
+        <div className="fixed z-50 flex h-screen w-96 flex-col items-center space-y-20 rounded-tr-3xl rounded-br-3xl bg-zinc-800 py-10">
+            <p className="flex justify-center text-4xl font-bold">Sketch</p>
 
             <div className="flex flex-col justify-center space-y-2 ">
-                <div className="rounded-full bg-slate-100 w-24 h-24 border-4 border-t-fuchsia-600 border-r-fuchsia-600 border-b-violet-900 border-l-violet-900"></div>
+                <div className="h-24 w-24 rounded-full border-4 border-t-fuchsia-600 border-r-fuchsia-600 border-b-violet-900 border-l-violet-900 bg-slate-100"></div>
                 <h5 className=" flex justify-center font-bold">Name</h5>
                 <Link href="profile">
                     <Button value="Profile" />
                 </Link>
             </div>
 
-            <div className="flex flex-col justify-between items-center h-full ">
+            <div className="flex h-full flex-col items-center justify-between ">
                 <div className="flex flex-col space-y-8">
                     <SidebarItems
                         icon={<AiFillHome />}
@@ -58,7 +58,7 @@ export default function AdminSidebar() {
                 <ButtonIcon
                     width="w-64"
                     height="h-14"
-                    icon={<MdLogout className="w-6 h-6" />}
+                    icon={<MdLogout className="h-6 w-6" />}
                     value="Logout"
                 />
             </div>
