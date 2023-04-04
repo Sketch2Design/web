@@ -3,10 +3,16 @@ import { useRouter } from 'next/router'
 
 import useData from '@/utils/hooks/supabase/useData'
 
+import {
+    useCanvasContext,
+    useExternalCanvasContext,
+} from '@/store/context/providers/CanvasProvider'
+
 import Skelton from '@/model/Workspace/Cards/Skelton'
 import SmallCard from '@/model/Workspace/Cards/SmallCard'
 import Sidebar from '@/model/Workspace/Sidebar/Sidebar'
 import Button from '@/components/Button/Button'
+import { CANVAS_ACTIONS, CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 
 export default function DesignsPage() {
     const router = useRouter()

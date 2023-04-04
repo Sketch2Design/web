@@ -2,16 +2,17 @@ import { useRouter } from 'next/router'
 
 import useData from '@/utils/hooks/supabase/useData'
 
-import Skelton from '@/model/Workspace/Cards/Skelton'
-import SmallCard from '@/model/Workspace/Cards/SmallCard'
-import Header from '@/model/Workspace/Dashboard/Header'
-import MainCard from '@/model/Workspace/Dashboard/MainCard'
-import Sidebar from '@/model/Workspace/Sidebar/Sidebar'
 import {
     useCanvasContext,
     useExternalCanvasContext,
 } from '@/store/context/providers/CanvasProvider'
 import { CANVAS_ACTIONS, CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
+
+import Skelton from '@/model/Workspace/Cards/Skelton'
+import SmallCard from '@/model/Workspace/Cards/SmallCard'
+import Header from '@/model/Workspace/Dashboard/Header'
+import MainCard from '@/model/Workspace/Dashboard/MainCard'
+import Sidebar from '@/model/Workspace/Sidebar/Sidebar'
 
 export default function Dashboard() {
     const router = useRouter()

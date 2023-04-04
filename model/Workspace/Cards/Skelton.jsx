@@ -5,7 +5,7 @@ export default function Skelton() {
                 No design
             </div>
             <div className="flex flex-col">
-                <h5 className="text-white">Heading</h5>
+                <h5 className="text-white">Design</h5>
             </div>
         </div>
     )
