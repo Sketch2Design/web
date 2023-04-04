@@ -8,7 +8,7 @@ import SmallCard from '@/model/Workspace/Cards/SmallCard'
 import Sidebar from '@/model/Workspace/Sidebar/Sidebar'
 import Button from '@/components/Button/Button'
 
-export default function template() {
+export default function DesignsPage() {
     const router = useRouter()
 
     const { designs } = useData()

@@ -4,7 +4,7 @@ import Skelton from '@/model/Workspace/Cards/Skelton'
 import SmallCard from '@/model/Workspace/Cards/SmallCard'
 import Sidebar from '@/model/Workspace/Sidebar/Sidebar'
 
-export default function template() {
+export default function TemplatesPage() {
     const { templates, createDesignFromTemplate } = useData()
 
     return (
