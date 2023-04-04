@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 
-import LabelInput from '@/components/Input/LabelInput'
+import EditInput from '@/components/Input/EditInput'
 import useAuth from '@/utils/hooks/supabase/useAuth'
 
 export default function EditName({ name, email }) {
@@ -11,7 +11,7 @@ export default function EditName({ name, email }) {
 
     return (
         <div className="flex items-center justify-center space-x-96 px-96">
-            <LabelInput
+            <EditInput
                 name="name"
                 placeholder="Name"
                 type="text"
@@ -25,7 +25,7 @@ export default function EditName({ name, email }) {
                 editFunc={() => setsave(true)}
                 save={save}
             />
-            <LabelInput
+            <EditInput
                 name="email"
                 placeholder="Email"
                 type="email"

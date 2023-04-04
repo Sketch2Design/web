@@ -1,16 +1,16 @@
-export default function IconButton({ value, icon, width, height }) {
+export default function IconButton({ value, icon, width, height, onClick }) {
     return (
         <div
-            className={`bg-gradient-to-b from-fuchsia-600 to-violet-600 rounded-md relative ${width} ${height}`}
+            className={`relative rounded-md bg-gradient-to-b from-fuchsia-600 to-violet-600 ${width} ${height}`}
         >
             <button
+                onClick={onClick}
                 className={`
-				absolute inset-0 m-[1px]
-				bg-zinc-800
-				px-4 py-2
+				absolute inset-0 m-[1px] flex
+				items-center space-x-2
 				rounded-md
-				font-semibold text-xl 
-				flex items-center space-x-2
+				bg-zinc-800 px-4 
+				py-2 text-xl font-semibold
 				`}
             >
                 <span>{icon}</span>

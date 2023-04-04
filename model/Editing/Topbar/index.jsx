@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { useElementContext } from '@/store/context/providers/ElementProvider'
 import { useExportContext } from '@/store/context/providers/CanvasProvider'
 
@@ -42,17 +44,21 @@ export default function Topbar() {
                 />
             </div>
 
-            <div className="flex">
+            <div className="flex space-x-4">
+                <Link href="/dashboard">
+                    <Button value="Home" />
+                </Link>
                 <Button
                     value="Export"
                     onClick={() => {
                         const dataURL = canvasRef.current.toDataURL({
                             pixelRatio: 2,
+                            mimeType: 'image/jpeg',
                             width: 720,
                             height: 720,
                         })
                         let link = document.createElement('a')
-                        link.download = 'image.png'
+                        link.download = 'image.jpeg'
                         link.href = dataURL
                         document.body.appendChild(link)
                         link.click()

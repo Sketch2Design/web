@@ -1,83 +1,102 @@
 import { useRef, useState } from 'react'
-import * as tf from '@tensorflow/tfjs'
+import { useRouter } from 'next/router'
+import supabase from 'supabase'
+
+import { useAuthContext } from '@/store/context/providers/AuthProvider'
+import {
+    useCanvasContext,
+    useExportContext,
+    useExternalCanvasContext,
+} from '@/store/context/providers/CanvasProvider'
+
+import LabelInput from '@/components/Input/LabelInput'
+import { CANVAS_ACTIONS, CURRENT_ACTIONS } from '@/store/reducer/canvasReducer'
 
 export default function CreatePage() {
-    const ref = useRef(null)
+    const router = useRouter()
 
-    async function detect() {
-        const net = await tf.loadGraphModel(
-            'https://jklozawylzpkjhwyvdlc.supabase.co/storage/v1/object/public/model/model.json'
-        )
+    const { setcanvas } = useExportContext()
+    const { auth } = useAuthContext()
+    const { canvasItemsDispatch, currentElementDispatch } = useCanvasContext()
+    const { externalCurrentDispatch } = useExternalCanvasContext()
 
-        const getImagePath = URL.createObjectURL(ref.current.files[0])
-        const img2 = document.createElement('img') // Use DOM HTMLImageElement
-        img2.src = getImagePath
-        img2.width = 640
-        img2.height = 640
+    const nameRef = useRef(null)
+    const widthRef = useRef(null)
+    const heightRef = useRef(null)
 
-        const img = tf.browser.fromPixels(img2)
-        const resized = tf.image.resizeBilinear(img, [640, 640])
-        const casted = resized.cast('int32')
-        const expanded = casted.expandDims(0)
-        const obj = await net.executeAsync(expanded)
+    const [loading, setloading] = useState(false)
 
-        const boxes = await obj[0].arraySync()
-        const classes = await obj[1].arraySync()
-        const scores = await obj[3].arraySync()
+    async function createDesign() {
+        setloading(true)
+        const { data, error } = await supabase
+            .from('design')
+            .insert({
+                name: nameRef.current.value,
+                owner: auth?.id,
+                editors: {
+                    users: [{ id: auth?.id, type: 'owner' }],
+                },
+                image_settings: {
+                    width: widthRef.current.value,
+                    height: heightRef.current.value,
+                },
+            })
+            .select()
+        setloading(false)
+        setcanvas({
+            size: {
+                w: widthRef.current.value,
+                h: heightRef.current.value,
+            },
+        })
 
-        console.log(boxes[0], '-', classes[0], '-', scores[0])
-        // for (let i = 0; i <= box.length; i++) {
-        //     const [y, x, height, width] = box[i]
-        //     console.log(y, x, height, width)
-        // }
-
-        tf.dispose(img)
-        tf.dispose(resized)
-        tf.dispose(casted)
-        tf.dispose(expanded)
-        tf.dispose(obj)
+        if (!error) {
+            canvasItemsDispatch({
+                type: CANVAS_ACTIONS.RESET,
+            })
+            currentElementDispatch({
+                type: CURRENT_ACTIONS.RESET,
+            })
+            externalCurrentDispatch({
+                type: CURRENT_ACTIONS.RESET,
+            })
+            router.push({
+                pathname: '/edit/[designId]',
+                query: { designId: data[0]?.id },
+            })
+        }
     }
 
     return (
-        <div className=" mx-52 flex  min-h-screen flex-row items-center justify-center rounded-xl py-5">
-            <input
-                ref={ref}
-                type="file"
-                className="h-12 w-96 bg-zinc-800"
-                onChange={detect}
-            />
-            <div className="flex h-96 w-3/5 flex-row justify-between rounded-xl bg-gradient-to-r from-fuchsia-600 to-violet-600 py-8 pr-1 ">
-                <div className="flex flex-col px-8 font-bold text-black">
-                    <p className="text-lg font-bold">Create a new template </p>
-                    <p>Name</p>
-                    <input type="text" placeholder="Project Name"></input>
-
-                    <label htmlFor="template">Template:</label>
-                    <select id="template" name="template">
-                        <option value="A4">A4</option>
-                        <option value="A3">A3</option>
-                        <option value="Instagram">Instagram</option>
-                    </select>
-
-                    <p>Image Size</p>
-                    <br></br>
-                    <p>
-                        Width: <input type="number" id="width" />{' '}
-                    </p>
-                    <br></br>
-                    <p>
-                        Height: <input type="number" id="height" />{' '}
-                    </p>
-                </div>
-                <div className="mr-9 flex w-full flex-col items-center justify-center">
-                    <div className="h-44 w-full bg-white"></div>
-                    <button className="w-full border bg-black">Upload</button>
-                    <br></br>
-                    <div className=" flex w-full justify-end">
-                        <button className="w-16 rounded-xl border bg-black  ">
-                            Create
-                        </button>
-                    </div>
+        <div className="flex min-h-screen  items-center justify-center">
+            <div className="flex flex-col items-center justify-center rounded-xl bg-gradient-to-r from-fuchsia-600 to-violet-600 py-10 px-20">
+                <h1 className="pt-4 pb-8 font-bold">Create a new Design </h1>
+                <div className="flex flex-col space-y-6">
+                    <LabelInput
+                        type="text"
+                        name="design_name"
+                        placeholder="Design Name"
+                        ref={nameRef}
+                    />
+                    <LabelInput
+                        type="number"
+                        name="width"
+                        placeholder="Width"
+                        ref={widthRef}
+                    />
+                    <LabelInput
+                        type="number"
+                        name="height"
+                        placeholder="Height"
+                        ref={heightRef}
+                    />
+                    <button
+                        className="h-14 w-80 rounded-xl border-2 border-transparent bg-zinc-100 text-xl font-bold text-zinc-900
+                         hover:border-white hover:bg-transparent hover:text-white"
+                        onClick={createDesign}
+                    >
+                        {loading ? 'Creating...' : 'Create'}
+                    </button>
                 </div>
             </div>
         </div>

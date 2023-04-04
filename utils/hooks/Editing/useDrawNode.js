@@ -49,10 +49,7 @@ export default function useDrawNode(ref) {
 
     function reset() {
         element?.id !== null && elementDispatch({ type: ELEMENT_ACTIONS.RESET })
-        if (
-            ref.current.mouseClickEndShape == null &&
-            currentElement.id !== null
-        ) {
+        if (currentElement.id !== null) {
             currentElementDispatch({ type: CURRENT_ACTIONS.RESET })
         }
     }

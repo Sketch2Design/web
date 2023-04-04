@@ -5,6 +5,7 @@ export const CANVAS_ACTIONS = {
     ADD_ALL: 'add_all',
     DELETE: 'delete_item',
     UPDATE: 'update_item',
+    RESET: 'reset_all',
 }
 
 export const CURRENT_ACTIONS = {
@@ -36,6 +37,10 @@ export function canvasReducer(state, action) {
         case CANVAS_ACTIONS.DELETE: {
             const filtered = state.filter((item) => item.id !== action.id)
             return filtered
+        }
+
+        case CANVAS_ACTIONS.RESET: {
+            return []
         }
     }
 }

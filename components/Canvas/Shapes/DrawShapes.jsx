@@ -26,6 +26,7 @@ export default function DrawShapes() {
     const shapes = useMemo(
         () =>
             canvasItems?.map((item) => {
+                console.log('sss')
                 if (
                     item.main === 'Shapes' &&
                     item.id !== currentElement?.id &&
