@@ -25,8 +25,19 @@ export default function CreatePage() {
     const heightRef = useRef(null)
 
     const [loading, setloading] = useState(false)
+    const [error, seterror] = useState(null)
 
     async function createDesign() {
+        seterror(null)
+
+        if (
+            nameRef.current.value === '' ||
+            widthRef.current.value === '' ||
+            heightRef.current.value === ''
+        ) {
+            seterror('All fields required')
+            return
+        }
         setloading(true)
         const { data, error } = await supabase
             .from('design')
@@ -90,6 +101,11 @@ export default function CreatePage() {
                         placeholder="Height"
                         ref={heightRef}
                     />
+                    {error && (
+                        <p className="text-lg font-semibold text-red-400">
+                            {error}
+                        </p>
+                    )}
                     <button
                         className="h-14 w-80 rounded-xl border-2 border-transparent bg-zinc-100 text-xl font-bold text-zinc-900
                          hover:border-white hover:bg-transparent hover:text-white"
